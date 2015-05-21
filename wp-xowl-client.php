@@ -11,27 +11,25 @@ ini_set("display_errors", 1);
 * Author URI: http://www.ximdex.com/
 **/
 
-//Para evitar ejecucion directa del archivo
-//defined( 'ABSPATH' ) or die( 'No script kiddies please!' );
+//Avoiding direct execution!
+defined( 'ABSPATH' ) or die( 'Do not execute me naked, please!' );
+
 define( 'XOWL_VERSION', '1.0.0' );
 define( 'XOWL_MINIMUM_WP_VERSION', '3.2' );
-//define( 'XOWL_PLUGIN_URL', plugin_dir_url( __FILE__ ) );
-//define( 'XOWL_PLUGIN_DIR', plugin_dir_path( __FILE__ ) );
 
-register_activation_hook( __FILE__, array( 'Xowl', 'plugin_activation' ) );
-register_deactivation_hook( __FILE__, array( 'Xowl', 'plugin_deactivation' ) );
+define( 'XOWL_PLUGIN_URL', plugin_dir_url( __FILE__ ) );
+define( 'XOWL_PLUGIN_DIR', plugin_dir_path( __FILE__ ) );
 
-require_once( XOWL_PLUGIN_DIR . '/inc/XowlService.php' );
-require_once( XOWL_PLUGIN_DIR . '/inc/Xowl.php' );
+register_activation_hook( __FILE__, array( 'XowlClient', 'plugin_activation' ) );
+register_deactivation_hook( __FILE__, array( 'XowlClient', 'plugin_deactivation' ) );
 
-print_r(get_defined_constants(true));
+require_once( XOWL_PLUGIN_DIR . '/inc/XowlService.class.php' );
+require_once( XOWL_PLUGIN_DIR . '/inc/XowlClient.class.php' );
 
-$response=  wp_remote_get('http://demo.ximdex.com/xowl/v1/enhance');
-if(is_wp_error($response)){
- echo 'Error Found ( '.$response->get_error_message().' )';
-}
-else{
-	$content=wp_remote_retrieve_response_message($response);
-}
-echo $content;
-?>
+add_action( 'init', array( 'XowlClient', 'init' ) );
+
+/* Add the TinyMCE Xowl Plugin */
+add_filter('mce_external_plugins', array( 'XowlClient','xowl_client_plugin'));
+
+/* Plugin Name: My TinyMCE Buttons */
+add_action( 'admin_init', array( 'XowlClient','xowl_tinymce_button'));

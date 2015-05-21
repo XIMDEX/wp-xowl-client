@@ -3,8 +3,6 @@
 /**
  *  \details © 2014  Open Ximdex Evolution SL [http://www.ximdex.org]
  *
- *  Ximdex a Semantic Content Management System (CMS)
- *
  *  This program is free software: you can redistribute it and/or modify
  *  it under the terms of the GNU Affero General Public License as published
  *  by the Free Software Foundation, either version 3 of the License, or
@@ -35,7 +33,6 @@ class XowlService {
         if (filter_var($endpoint, FILTER_VALIDATE_URL) == FALSE) {
             throw new InvalidArgumentException($endpoint . " is not a valid URL");
         }
-
         $this->endpoint = $endpoint;
     }
 
@@ -46,6 +43,7 @@ class XowlService {
     /**
      * <p>Query the server with the default response format (application/json)</p>
      * @param string $text
+     * @return this
      */
     public function suggest($text) {
         return $this->query($text);
@@ -57,7 +55,7 @@ class XowlService {
      * @return this. 
      */
     private function query($text) {
-        $token = variable_get('xowl_usertoken', '000-00000-000');
+        $token = get_option('xowl_usertoken', '000-00000-000');
         $dataText = array(
             'token' => $token,
             'content' => $text
@@ -88,13 +86,10 @@ class XowlService {
      *
      * <p>Parse response data from stanbol server. JSON Format default.</p>
      * @param string|json $json The data in JSON format to be parsed
-     * @param string $text The text being processed
-     *
      * @return an array containing the mentions of the text and their related entities
      */
     private function parseData($json) {
         return $json->data;
     }
-
 }
 
