@@ -10,32 +10,45 @@
              */
             ed.addButton( 'button_eek', {
                 title : 'Enhance content',
-                image : '../wp-includes/images/spinner.gif',
+                //TODO: Search for a better Xowl icon
+                image : '../wp-content/plugins/wp-xowl-client/assets/imgs/enhance.png',
                 onclick : function() {
-                    ed.selection.getContent();
-                    alert(tinyMCE.activeEditor.getContent());
+                    //ed.selection.getContent();
+                    //alert(tinyMCE.activeEditor.getContent());
+                    $loader = jQuery("<div/>", {
+                        "class": 'loader'
+                    });
+                    jQuery("<img/>").attr('src', './../wp-content/plugins/wp-xowl-client/assets/imgs/loader.gif').appendTo($loader);
+                    jQuery('body').css("position", "relative").append($loader);
+                    jQuery.ajax({
+                        type: 'POST',
+                        dataType: "json",
+                        url: 'http://x8.ximdex.net:9090/enhancer',
+                        data: {
+                            content: tinyMCE.activeEditor.getContent()
+                        }
+                    }).done(function(data) {
+                        $loader.remove();
+                        if (data && (data.text != null) && data.text.length > 0) {
+                            alert(data);
+                            //CKEDITOR.xowl['lastResponse'] = data;
+                            //editor.setData('', function() {
+                                //this.insertHtml(replaceXowlAnnotations(data));
+                                //fillSuggestionsField();
+                            //});
+                        } else {
+                            alert(data.status + ": " + data.message);
+                        }
+                    }).fail(function() {
+                        $loader.remove();
+                        alert("Error retrieving content from Xowl Service");
+                    });
+                    //TODO: only replace the semantic links
+                    //tinyMCE.activeEditor.setContent('') ;
                 }
             });
-            /**
-             * Adds HTML tag to selected content
-             */
-            ed.addButton( 'button_green', {
-                title : 'Add span',
-                image : '../wp-includes/images/smilies/icon_mrgreen.gif',
-                cmd: 'button_green_cmd'
-            });
-            ed.addCommand( 'button_green_cmd', function() {
-                var selected_text = ed.selection.getContent();
-                var return_text = '';
-                return_text = '<h1>' + selected_text + '</h1>';
-                ed.execCommand('mceInsertContent', 0, return_text);
-            });
-        },
-        createControl : function(n, cm) {
-            return null;
         }
     });
     /* Start the buttons */
     tinymce.PluginManager.add( 'my_button_script', tinymce.plugins.XowlButton );
 })();
-

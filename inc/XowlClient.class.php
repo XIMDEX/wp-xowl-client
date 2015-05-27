@@ -35,8 +35,15 @@ class XowlClient {
             if(get_option('XOWL_API_KEY')==false){
                 add_option('XOWL_API_KEY','0000-00-0000');
             }
-            self::init_hooks();
+            //self::init_hooks();
+            self::load_xowl_styles();
         }
+    }
+
+    private static function load_xowl_styles(){
+        //wp_register_style('styles.css', XOWL_PLUGIN_DIR.'assets/css/styles.css', array(),false);
+        wp_register_style('styles.css', '/wp-content/plugins/wp-xowl-client/assets/css/styles.css', array(),false);
+        wp_enqueue_style('styles.css');
     }
 
     private static function init_hooks() {
@@ -93,6 +100,69 @@ class XowlClient {
     public static function xowl_add_tinymce_button( $plugin_array ) {
         $plugin_array['my_button_script'] = plugins_url('../assets/js/xowl_button.js', __FILE__);
         return $plugin_array;
+    }
+
+    /**
+     * Add Settings link to plugins - code from GD Star Ratings
+     */
+    /*public static function add_settings_link($links, $file) {
+        static $this_plugin;
+        if (!$this_plugin) $this_plugin = plugin_basename(__FILE__);
+
+        if ($file == $this_plugin){
+            $settings_link = '<a href="admin.php?page=xowl-admin.php">'.__("Settings", "photosmash-galleries").'</a>';
+            array_unshift($links, $settings_link);
+        }
+        return $links;
+    }*/
+
+    public static function admin_plugin_settings_link( $links ) {
+        $settings_link = '<a href="'.esc_url( self::get_page_url() ).'">'.__('Settings', 'xowl').'</a>';
+        array_unshift( $links, $settings_link );
+        return $links;
+    }
+
+    public static function get_page_url( $page = 'config' ) {
+        $args = array( 'page' => 'xowl-config' );
+        $url = add_query_arg( $args, admin_url( 'options-general.php' ) );
+        return $url;
+    }
+
+    public static function admin_menu() {
+            self::load_menu();
+    }
+
+    public static function load_menu() {
+        if ( class_exists( 'Jetpack' ) )
+            $hook = add_submenu_page( 'jetpack', __( 'Akismet2' , 'akismet'), __( 'Akismet5' , 'akismet'), 'manage_options', 'akismet-key-config', array( 'Akismet_Admin', 'display_page' ) );
+        else
+            $hook = add_options_page('Xowl Configuration', 'Xowl client', 'manage_options', 'xowl-config', array( 'XowlClient', 'display_page' ) );
+
+        if ( version_compare( $GLOBALS['wp_version'], '3.3', '>=' ) ) {
+            add_action( "load-$hook", array( 'XowlClient', 'admin_help' ) );
+        }
+    }
+
+    public static function display_page() {
+        echo '<div class="wrap"><h2>Xowl Service</h2></div>';
+        echo '<p>Welcome to the Xowl client configuration page. An API-KEY is required to enrich your content with semantic references to the main Semantic Data Stores linked by this service.</p>
+                <p>If you don\'t have one at this moment, please, follow <a href="" target="_blank">this link</a> and ¡get one for free!. It only takes a few seconds.</p>
+                <p>After that, type the given API-KEY on the next input in order to validate it. Enjoy!</p>';
+        echo '<div class="activate-highlight activate-option">
+	<div class="option-description" style="width:75%;">
+		<strong class="small-heading">API-KEY</strong>
+    </div>
+<form name="akismet_activate" id="akismet_activate" action="CHECK_TOKEN" method="post" class="right" target="_blank">
+    <input type="hidden" name="passback_url" value="<?php echo esc_attr( XowlClient::get_page_url() ); ?>"/>
+    <!--<input type="hidden" name="user_id" value="<?php echo $akismet_user->ID;?>"/>-->
+    <input type="text" name="API-token"/>
+    <input type="submit" class="button button-primary" value="Check token"/>
+</form>
+</div>';
+    }
+
+    public static function admin_help() {
+        echo "PEPE";
     }
 }
 
