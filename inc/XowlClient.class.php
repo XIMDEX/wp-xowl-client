@@ -23,21 +23,31 @@
  */
 
 class XowlClient {
-    const XOWL_ENDPOINT = 'http://demo.ximdex.com/xowl/api/';
-    const XOWL_PORT = 9091;
+
     private static $initiated = false;
+    private $service;
 
     public static function init() {
         if ( ! self::$initiated ) {
-            $st = new XowlService(self::XOWL_ENDPOINT);
 
+            add_option('XOWL_ENDPOINT','http://x8.ximdex.net/xowl/api/v1/enhancer');
             //saving API KEY on Wordpress db.
             if(get_option('XOWL_API_KEY')==false){
                 add_option('XOWL_API_KEY','0000-00-0000');
             }
+            $service = new XowlService(get_option('XOWL_ENDPOINT'));
             //self::init_hooks();
             self::load_xowl_styles();
         }
+    }
+
+    /**
+     * <p>Callback function for 'xowl/enhance' endpoint</p>
+     * <p>This function calls Ximdex Xowl endpoint to analyze and enhance the content</p>
+     */
+    function xowl_enhance_content(){
+        $content = filter_input(INPUT_POST, 'content');
+        echo $service->suggest($content);
     }
 
     private static function load_xowl_styles(){
