@@ -172,6 +172,24 @@ class XowlClient {
         <form action="" method="POST">
             <input type="hidden" name="passback_url" value="' . esc_attr (XowlClient::get_page_url()) . '"/>
 
+            <!-- get-api-key -->
+            <div class="xowl-get-api xowl-step">
+                <div class="xowl-step-row">
+                    <div class="xowl-step-left">
+                        <h4>Get your Api-Key</h4>
+
+                        <p>If you don\'t have one at this moment, you can <strong>¡GET ONE FOR FREE!</strong>.
+                        <br>
+                        <small>It only takes a few seconds.</small></p>
+                    </div>
+
+                    <div class="xowl-step-right text-right">
+                        <button type="button" class="button button-primary">get an api-key</button>
+                    </div>
+                </div>
+            </div>
+            <!-- end get-api-key -->
+
             <!-- enter-api-key -->
             <div class="xowl-endpoint xowl-step">
                 <div class="xowl-step-row">
@@ -190,24 +208,6 @@ class XowlClient {
                 </div>
             </div>
             <!-- end enter-api-key -->
-
-            <!-- get-api-key -->
-            <div class="xowl-get-api xowl-step xowl-step-disabled">
-                <div class="xowl-step-row">
-                    <div class="xowl-step-left">
-                        <h4>Get an Api-Key</h4>
-
-                        <p>If you don\'t have one at this moment, you can <strong>¡GET ONE FOR FREE!</strong>.
-                        <br>
-                        <small>It only takes a few seconds.</small></p>
-                    </div>
-
-                    <div class="xowl-step-right text-right">
-                        <button type="button" class="button button-primary">get an api-key</button>
-                    </div>
-                </div>
-            </div>
-            <!-- end get-api-key -->
 
             <!-- enter-api-key -->
             <div class="xowl-active-api xowl-step xowl-step-disabled">
