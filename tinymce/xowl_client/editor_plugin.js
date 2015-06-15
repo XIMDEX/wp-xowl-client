@@ -1,114 +1,227 @@
 /**
- * Created by OXE Development Team on 21/05/15.
+ * plugin for tinymce and wordpress accessing xowl service
  */
-(function($) {
+(function ($) {
     var fillSuggestionsField, openXowlDialog, processSemantic, removeSuggestion, replaceXowlAnnotations;
-    /* Register the buttons */
-    tinymce.create('tinymce.plugins.XowlButton', {
-        init : function(ed, url) {
-            /**
-             * Enhance your content
-             */
-            ed.addButton( 'button_eek', {
-                title : 'Enhance your content',
+    // Register the buttons
+    tinymce.create('tinymce.plugins.wpse72394_plugin', {
+        init: function (ed) {
+            var self = this;
+            self.firstLoad = true;
+            self.xsa = new XowlSemanticAdapter();
+
+            // listen click inside textarea
+            ed.on('click', function (ev) {
+                tinymce.activeEditor.dom.loadCSS('../wp-content/plugins/wp-xowl-client/assets/css/styles.css');
+                if (!self.xsa.ok || ev.originalTarget.className === "") {
+                    return;
+                }
+
+                // extract attribute value
+                var entityPosition = 0;
+                $.each(ev.explicitOriginalTarget.parentNode.attributes, function (i, e) {
+                    if (e.name === 'data-entity-position') {
+                        entityPosition = e.nodeValue;
+                        return false;
+                    }
+                });
+
+                // build select box
+                var si = self.xsa.semanticIndex[entityPosition];
+                var bodyValues = [];
+                $.each(self.xsa.elementsData[si].sem.entities, function (i, e) {
+                    bodyValues.push({text: e["rdfs:label"].value + ' (' + e.uri + ')', value: e.uri});
+                });
+
+                tinymce.activeEditor.windowManager.open({
+                    title: 'Select Entity Dialog',
+                    body: [{
+                            type: 'listbox',
+                            name: 'selectedEntity',
+                            label: 'Select Entities',
+                            values: bodyValues
+                        }],
+                    // rebuild content inside textarea
+                    onsubmit: function (sel) {
+                        self.xsa.modifyEntity(entityPosition, sel.data.selectedEntity);
+                        tinymce.activeEditor.setContent(self.xsa.textToEditor());
+                    }
+                });
+            });
+
+            // init xsa object
+            ed.on('LoadContent', function () {
+                self.firstLoad = true;
+                self.xsa.buildFromData({semantic: [], text: tinymce.activeEditor.getContent()});
+            });
+
+            // Enhance your content
+            ed.addButton('wpse72394_button', {
+                title: 'Enhance your content',
                 //TODO: Search for a better Xowl icon
-                image : '../wp-content/plugins/wp-xowl-client/assets/imgs/enhance.png',
-                onclick : function() {
-                    //ed.selection.getContent();
-                    //alert(tinyMCE.activeEditor.getContent());
+                image: '../wp-content/plugins/wp-xowl-client/assets/imgs/enhance.png',
+                onclick: function () {
+                    // add loader effect
                     $loader = $("<div/>", {
                         "class": 'loader'
                     });
-                    $("<img/>").attr('src', './../wp-content/plugins/wp-xowl-client/assets/imgs/loader.gif').appendTo($loader);
+                    $("<img/>").attr('src', '../wp-content/plugins/wp-xowl-client/assets/imgs/loader.gif').appendTo($loader);
                     $('body').css("position", "relative").append($loader);
-                    var data = {
-                        'action': '',
-                        'content': tinyMCE.activeEditor.getContent(),
-                        'type': 'POST',
-                        'dataType': "json"
-                    };
-                    $.post(ajaxurl, data, function(response) {
-                        alert('Got this from the server: ' + response);
-                    });
-                    $.ajax({
-                        type: 'POST',
-                        dataType: "json",
-                        //TODO: change this endpoint for the object of XowlService class
-                        url: 'http://x8.ximdex.net/xowl/api/v1/enhancer',
-                        data: {
-                            content: tinyMCE.activeEditor.getContent()
-                        }
-                    }).done(function(data) {
+
+                    // make request and replace content according with response
+                    // clean content before and after response
+                    $.post(xowlPlugin.xowl_endpoint, {
+                        token: xowlPlugin.xowl_apikey,
+                        content: tinymce.activeEditor.getContent()
+                    }).done(function (data) {
                         $loader.remove();
-                        alert(data);
-                        if (data && (data.text != null) && data.text.length > 0) {
-                            alert(data);
-                            tinyMCE.activeEditor.setContent(function() {
-                                    //TODO: Adapt this for TinyMCE
-                                    this.insertHtml(replaceXowlAnnotations(data));
-                                    //fillSuggestionsField();
-                                }
-                            );
-                        } else {
-                            alert("ERROR#1: "+data.status + ": " + data.message);
-                        }
-                    }).fail(function() {
+                        self.xsa = new XowlSemanticAdapter();
+                        self.xsa.buildFromData(data);
+                        tinymce.activeEditor.setContent(self.xsa.textToEditor());
+                    }).fail(function () {
                         $loader.remove();
+                        self.xsa = new XowlSemanticAdapter();
                         alert("Error retrieving content from Xowl Service");
                     });
-                    //TODO: only replace the semantic links
-                    //tinyMCE.activeEditor.setContent('') ;
                 }
             });
         }
     });
     /* Start the buttons */
-    tinymce.PluginManager.add( 'my_button_script', tinymce.plugins.XowlButton );
+    tinymce.PluginManager.add('wpse72394_button', tinymce.plugins.wpse72394_plugin);
 
-    replaceXowlAnnotations = function(result) {
-        var arr, newHref, newLink, oldHref, oldLink, re, reHref, src;
-        re = /<a[^<]*<\/a>/g;
-        reHref = /href="([^"]*)"/;
-        src = result.text;
-        while ((arr = re.exec(src)) !== null) {
-            oldLink = arr[0];
-            reHref.exec(oldLink);
-            oldHref = RegExp.$1;
-            newHref = oldHref.replace('dbpedia.org/resource', 'en.wikipedia.org/wiki');
-            newLink = oldLink.replace(oldHref, newHref);
-            src = src.replace(oldLink, newLink);
-        }
-        processSemantic(result.semantic);
-        return src;
+// ----------------------------------------------------------------------------
+
+    // helper class to manage text and other data
+    // maintains text and semantic nodes and serve data to editor
+    function XowlSemanticAdapter() {
+        this.semanticIndex = [];
+        this.elementsData = [];
+        this.semanticText = '';
+        this.ok = false;
+        this.saveAttr = {'class': 1, 'href': 1, 'target': 1};
+    }
+
+    // parse an anchor element and remove some attributes
+    XowlSemanticAdapter.prototype.filterAnchorAttributes = function (text) {
+        var self = this;
+        var jq = $(text);
+        var clone = $('<a>').text(jq.text());
+
+        $.each(jq.get(0).attributes, function (i, attrib) {
+            if (self.saveAttr[attrib.name]) {
+                clone.attr(attrib.name, attrib.value);
+            }
+        });
+
+        return clone;
     };
 
-    processSemantic = function(aSemantic) {
-        var ann, ent, entity, f, filteredEntities, mention, numSuggestions, oSemanticSet, sortedEntities, _i, _j, _k, _len, _len1, _len2;
-        for (_i = 0, _len = aSemantic.length; _i < _len; _i++) {
-            oSemanticSet = aSemantic[_i];
-            filteredEntities = [];
-            f = -1;
-            sortedEntities = oSemanticSet.entities.sort(function(a, b) {
-                return a.uri.localeCompare(b.uri);
-            });
-            for (_j = 0, _len1 = sortedEntities.length; _j < _len1; _j++) {
-                ann = sortedEntities[_j];
-                if (f === -1 || sortedEntities[f] !== ann) {
-                    filteredEntities.push(ann);
-                    f++;
+    // parse raw text
+    XowlSemanticAdapter.prototype.parseText = function (text) {
+        var self = this;
+        var html = $(text);
+        var htmlClone = $('<p>');
+        var arrayText = [];
+
+        html.contents().each(function (i, elem) {
+            if (elem.nodeType === 3) {
+                arrayText.push(elem.nodeValue);
+            }
+            else {
+                var clone = self.filterAnchorAttributes(elem);
+                arrayText.push(clone.get(0).outerHTML);
+            }
+        });
+
+        htmlClone.html(arrayText.join(""));
+        return htmlClone;
+    };
+
+    // parse server response and store in inner variables
+    XowlSemanticAdapter.prototype.buildFromData = function (data) {
+        var self = this;
+
+        if (typeof data.semantic === 'undefined' || data.semantic.length === 0) {
+            var parsed = self.parseText(data.text);
+            self.semanticText = parsed.html();
+            self.ok = false;
+            return;
+        }
+
+        var changeHref = function (oldHref) {
+            var patt = /(..\.)?(dbpedia.org\/resource\/)/;
+            var match = patt.exec(oldHref);
+            var lang = (typeof match[1] === 'undefined') ? 'en.' : match[1];
+            return oldHref.replace(match[0], lang + 'wikipedia.org/wiki/');
+        };
+
+        var idx = 0;
+        self.ok = true;
+        var html = $.parseHTML(data.text);
+        $.each(html[0].childNodes, function (i, elem) {
+            if (elem.nodeType === 3) {
+                self.elementsData.push({type: 3, elem: elem.nodeValue});
+            }
+            else {
+                if (elem.attributes.getNamedItem("data-cke-suggestions")) {
+                    var e1 = $(elem);
+                    // add position to help manipulation
+                    e1.attr("data-entity-position", idx);
+
+                    // replace dbpedia link
+                    var oldHref = e1.attr("href");
+                    e1.attr("href", changeHref(oldHref));
+                    e1.attr("target", '_blank');
+
+                    if (typeof data.semantic[idx] !== 'undefined') {
+                        // replace dbpedia link
+                        $.each(data.semantic[idx].entities, function (i, elem) {
+                            elem.uri = changeHref(elem.uri);
+                        });
+                        
+                        self.semanticIndex.push(self.elementsData.length);
+                        self.elementsData.push({type: 1, sem: data.semantic[idx], elem: e1.get(0)});
+                    }
+                    idx++;
+                }
+                else {
+                    self.elementsData.push({type: 2, elem: elem.outerHTML});
                 }
             }
-            for (_k = 0, _len2 = filteredEntities.length; _k < _len2; _k++) {
-                ent = filteredEntities[_k];
-                ent.uri = ent.uri.replace('dbpedia.org/resource', 'en.wikipedia.org/wiki');
-            }
-            mention = oSemanticSet['selected-text'];
-            entity = oSemanticSet.entities[0];
-            numSuggestions = oSemanticSet.entities.length;
-            //TODO: Adapt this code to TinyMMCE
-            CKEDITOR.xowl.suggestions[mention.value] = entity.uri;
-            CKEDITOR.xowl.entities[mention.value] = oSemanticSet.entities;
+        });
+    };
+
+    // return html with all attributes
+    XowlSemanticAdapter.prototype.textToEditor = function () {
+        var self = this;
+
+        if (self.ok) {
+            var newP = $("<p>");
+            $.each(self.elementsData, function (i, obj) {
+                newP.append(obj.elem);
+            });
+            self.semanticText = newP.html();
         }
+
+        return self.semanticText;
+    };
+
+    // return html with restricted attributes
+    XowlSemanticAdapter.prototype.modifyEntity = function (index, newHref) {
+        var self = this;
+
+        if (!self.ok) {
+            return;
+        }
+
+        var idx = self.semanticIndex[index];
+        var elem = self.elementsData[idx].elem;
+        var jq = $(elem);
+        jq.removeAttr("data-cke-suggestions");
+        jq.attr("href", newHref);
+        var wrap = $("<div>").append(jq);
+        self.elementsData[idx].elem = wrap.html();
     };
 
 

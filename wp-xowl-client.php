@@ -1,5 +1,4 @@
 <?php
-
 /**
  * Plugin Name: Xowl client
  * Plugin URI: http://demo.ximdex.com/xowl
@@ -8,14 +7,8 @@
  * Author: OXE development team
  * Author URI: http://www.ximdex.com/
  * */
-/* ------------------------------------ */
-//WATCH OUT! Only for development.
-error_reporting(E_ALL);
-ini_set("display_errors", 1);
-/* ------------------------------------ */
 
-
-//Constants definition
+// Constants definition
 defined('ABSPATH') or die('Do not execute me naked, please!'); //Avoiding direct execution!
 define('XOWL_VERSION', '1.0.0');
 define('XOWL_MINIMUM_WP_VERSION', '3.2');
@@ -34,28 +27,58 @@ add_option('xowl_endpoint', 'http://x8.ximdex.net/api/v1', '', 'yes');
 
 
 
-/* Activate the main stuff of the plugin */
+// Activate the main stuff of the plugin
 add_action('init', array('XowlClient', 'init'));
-//Adding settings menu
+// Adding settings menu
 add_action('admin_menu', array('XowlClient', 'admin_menu'), 5);
+
 /* Add the TinyMCE Xowl Plugin */
-add_filter('mce_external_plugins', array('XowlClient', 'xowl_client_plugin'));
+//add_filter('mce_external_plugins', array('XowlClient', 'xowl_client_plugin'));
+//add_action('admin_init', array('XowlClient', 'xowl_tinymce_button'));
+add_filter("mce_external_plugins", array('XowlClient', "wpse72394_register_tinymce_plugin"));
+add_filter('mce_buttons', array('XowlClient', 'wpse72394_add_tinymce_button'));
 
-//add_filter('plugin_action_links', array('XowlClient','add_settings_link'), 10, 2 );
-/* Plugin Name: My TinyMCE Buttons */
-add_action('admin_init', array('XowlClient', 'xowl_tinymce_button'));
+// Pass variables from wordpress to tinymce
+foreach (array('post.php', 'post-new.php') as $hook) {
+    add_action("admin_head-$hook", 'my_admin_head');
+}
 
-//Links
+function my_admin_head() {
+    ?>
+    <script type='text/javascript'>
+        var xowlPlugin = {
+            'xowl_endpoint': '<?= get_option('xowl_endpoint'); ?>',
+            'xowl_apikey': '<?= get_option('xowl_apikey'); ?>',
+            'xowl_css': '<?= XOWL_PLUGIN_URL + '/assets/css/styles.css'; ?>',
+        };
+    </script>
+    <?php
+}
+
+// Capture post content and filter link attributes
+add_filter('wp_insert_post_data', 'filter_post_data', '99', 2);
+
+function filter_post_data($data, $postarr) {
+    require_once XOWL_PLUGIN_DIR . 'inc/simple_html_dom.php';
+    error_log("FILTER post data before save...\n", 3, "/tmp/wp.log");
+
+    // parse html and filter attributes
+    $html = str_get_html($data['post_content']);
+    foreach ($html->find('a') as $elem) {
+        $elem->{'data-cke-annotation'} = null;
+        $elem->{'data-cke-suggestions'} = null;
+        $elem->{'data-cke-type'} = null;
+        $elem->{'data-entity-position'} = null;
+    }
+    // set post_content
+    $data['post_content'] = $html . '';
+    return $data;
+}
+
+// Links in config tab
 add_filter('plugin_action_links_' . plugin_basename(plugin_dir_path(__FILE__) . 'wp-xowl-client.php'), array('XowlClient', 'admin_plugin_settings_link'), 10, 2);
 
-//add_filter( 'plugin_action_links_'.plugin_basename( plugin_dir_path( __FILE__ ) . 'akismet.php'), array( 'Akismet_Admin', 'admin_plugin_settings_link' ) );
-
-/* function my_plugin_action_links( $links ) {
-  $links[] = '<a href="'. esc_url( get_admin_url(null, 'options-general.php?page=xowl-admin.php') ) .'">Settings</a>';
-  return $links;
-  } */
-
-//TODO: parse Xowl response.
+// TODO: parse Xowl response.
 function xowl_st($atts, $content) {
     $a = shortcode_atts(array(
         'entity' => '',

@@ -30,7 +30,7 @@ class XowlClient {
     public static function init() {
         if (!self::$initiated) {
 
-            add_option('XOWL_ENDPOINT', 'http://x8.ximdex.net/xowl/api/v1/enhancer');
+            add_option('XOWL_ENDPOINT', 'http://x8.ximdex.net/xowl/api/v1/enhance');
             //saving API KEY on Wordpress db.
             if (get_option('XOWL_API_KEY') == false) {
                 add_option('XOWL_API_KEY', '0000-00-0000');
@@ -51,9 +51,8 @@ class XowlClient {
     }
 
     private static function load_xowl_styles() {
-        //wp_register_style('styles.css', XOWL_PLUGIN_DIR.'assets/css/styles.css', array(),false);
-        wp_register_style('styles.css', '/wp-content/plugins/wp-xowl-client/assets/css/styles.css', array(), false);
-        wp_enqueue_style('styles.css');
+        //wp_register_style('styles.css', '/wp-content/plugins/wp-xowl-client/assets/css/styles.css', array(), false);
+        //wp_enqueue_style('styles.css');
     }
 
     private static function init_hooks() {
@@ -79,38 +78,50 @@ class XowlClient {
         //error_log("Desactivando el plugin!");
     }
 
-    // Load our plugin into TinyMCE
-    public static function xowl_client_plugin() {
-        //Add any more plugins you want to load here
-        $plugins = array('xowl_client');
-        $plugins_array = array();
-
-        //Build the response - the key is the plugin name, value is the URL to the plugin JS
-        foreach ($plugins as $plugin) {
-            $plugins_array[$plugin] = plugins_url('../tinymce/', __FILE__) . $plugin . '/editor_plugin.js';
-        }
-
-        return $plugins_array;
+    //Esta llamada registra el plugin. Crearemos un archivo Javascript dentro de nuestra carpeta del tema.
+    public static function wpse72394_register_tinymce_plugin($plugin_array) {
+        $plugin_array['wpse72394_button'] = plugins_url('..', __FILE__) . '/tinymce/xowl_client/editor_plugin.js';
+        return $plugin_array;
     }
 
-    public static function xowl_tinymce_button() {
-        if (current_user_can('edit_posts') && current_user_can('edit_pages')) {
-            if (get_user_option('rich_editing') == true) {
-                add_filter('mce_buttons', array('XowlClient', 'xowl_register_tinymce_button'));
-                add_filter('mce_external_plugins', array('XowlClient', 'xowl_add_tinymce_button'));
-            }
-        }
-    }
-
-    public static function xowl_register_tinymce_button($buttons) {
-        array_push($buttons, "button_eek", "button_green");
+    //Esta llamada añadirá el botón a la barra
+    public static function wpse72394_add_tinymce_button($buttons) {
+        //Añadimos el ID del botón al array
+        $buttons[] = "wpse72394_button";
         return $buttons;
     }
 
-    public static function xowl_add_tinymce_button($plugin_array) {
-        $plugin_array['my_button_script'] = plugins_url('../assets/js/xowl_button.js', __FILE__);
-        return $plugin_array;
-    }
+    // ------------------------------------
+//    // Load our plugin into TinyMCE
+//    public static function xowl_client_pluginz() {
+//        //Add any more plugins you want to load here
+//        $plugins = array('xowl_client');
+//        $plugins_array = array();
+//
+//        //Build the response - the key is the plugin name, value is the URL to the plugin JS
+//        foreach ($plugins as $plugin) {
+//            $plugins_array[$plugin] = plugins_url('../tinymce/', __FILE__) . $plugin . '/editor_plugin.js';
+//        }
+//
+//        return $plugins_array;
+//    }
+//    public static function xowl_tinymce_button() {
+//        if (current_user_can('edit_posts') && current_user_can('edit_pages')) {
+//            if (get_user_option('rich_editing') == true) {
+//                add_filter('mce_buttons', array('XowlClient', 'xowl_register_tinymce_button'));
+//                add_filter('mce_external_plugins', array('XowlClient', 'xowl_add_tinymce_button'));
+//            }
+//        }
+//    }
+//    public static function xowl_register_tinymce_button($buttons) {
+//        array_push($buttons, "button_eek", "button_green");
+//        return $buttons;
+//    }
+//    public static function xowl_add_tinymce_button($plugin_array) {
+//        $plugin_array['my_button_script'] = plugins_url('../assets/js/xowl_button.js', __FILE__);
+//        return $plugin_array;
+//    }
+    // ------------------------------------
 
     /**
      * Add Settings link to plugins - code from GD Star Ratings
@@ -126,13 +137,14 @@ class XowlClient {
       return $links;
       } */
 
+    //Links in config tab
     public static function admin_plugin_settings_link($links) {
         $settings_link = '<a href="' . esc_url(self::get_page_url()) . '">' . __('Settings', 'xowl') . '</a>';
         array_unshift($links, $settings_link);
         return $links;
     }
 
-    public static function get_page_url($page = 'config') {
+    private static function get_page_url($page = 'config') {
         $args = array('page' => 'xowl-config');
         $url = add_query_arg($args, admin_url('options-general.php'));
         return $url;
@@ -148,6 +160,7 @@ class XowlClient {
             update_option($name, $_POST[$name]);
         }
     }
+
     public static function display_page() {
         self::updateVar('xowl_endpoint');
         self::updateVar('xowl_apikey');
@@ -155,6 +168,7 @@ class XowlClient {
     }
 
     public static function admin_help() {
+        
     }
 
 }

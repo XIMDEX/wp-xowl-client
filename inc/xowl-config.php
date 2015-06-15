@@ -1,5 +1,3 @@
-<!-- <div class="wrap"><h2>Xowl Service</h2></div><p>Welcome to the Xowl client configuration page. An API-KEY is required to enrich your content with semantic references to the main Semantic Data Stores linked by this service.</p><p>If you don\'t have one at this moment, please, follow <a href="" target="_blank">this link</a> and ¡get one for free!. It only takes a few seconds.</p><p>After that, type the given API-KEY on the next input in order to validate it. Enjoy!</p><div class="activate-highlight activate-option"><div class="option-description" style="width:75%;"><strong class="small-heading">API-KEY</strong></div><form name="akismet_activate" id="akismet_activate" action="CHECK_TOKEN" method="post" class="right" target="_blank"><input type="hidden" name="passback_url" value="' . esc_attr (XowlClient::get_page_url()) . '"/><input type="text" name="API-token"/><input type="submit" class="button button-primary" value="Check token"/></form></div>';-->
-
 <div class="xowl-settings">
     <h2>
         <img src="<?= plugins_url('../assets/imgs/logo-xowl.png', __FILE__); ?>" alt="XOWL Service" title="XOWL Service">
