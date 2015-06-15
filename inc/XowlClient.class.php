@@ -1,7 +1,7 @@
 <?php
 
 /**
- *  \details © 2014  Open Ximdex Evolution SL [http://www.ximdex.org]
+ *  \details © 2015  Open Ximdex Evolution SL [http://www.ximdex.org]
  *
  *  This program is free software: you can redistribute it and/or modify
  *  it under the terms of the GNU Affero General Public License as published
