@@ -23,16 +23,13 @@ register_deactivation_hook(__FILE__, array('XowlClient', 'plugin_deactivation'))
 
 add_option('xowl_register', 'http://x8.ximdex.net/register/signup', '', 'yes');
 add_option('xowl_endpoint', 'http://x8.ximdex.net/api/v1', '', 'yes');
-//add_action('wp_ajax_xowl_enhance', 'xowl_enhance_process');
-
-
 
 // Activate the main stuff of the plugin
 add_action('init', array('XowlClient', 'init'));
 // Adding settings menu
 add_action('admin_menu', array('XowlClient', 'admin_menu'), 5);
 
-/* Add the TinyMCE Xowl Plugin */
+// Add the TinyMCE Xowl Plugin
 add_filter("mce_external_plugins", array('XowlClient', "xowl_register_tinymce_plugin"));
 add_filter('mce_buttons', array('XowlClient', 'xowl_add_tinymce_button'));
 
@@ -42,15 +39,13 @@ foreach (array('post.php', 'post-new.php') as $hook) {
 }
 
 function my_admin_head() {
-    ?>
-    <script type='text/javascript'>
-        var xowlPlugin = {
-            'xowl_endpoint': '<?= get_option('xowl_endpoint'); ?>',
-            'xowl_apikey': '<?= get_option('xowl_apikey'); ?>',
-            'xowl_css': '<?= XOWL_PLUGIN_URL + '/assets/css/styles.css'; ?>',
-        };
-    </script>
-    <?php
+    echo "<script type='text/javascript'>";
+    echo "var xowlPlugin = {";
+    echo "   'xowl_endpoint': '" . get_option('xowl_endpoint') . "',";
+    echo "   'xowl_apikey': '" . get_option('xowl_apikey') . "',";
+    echo "   'xowl_css': '" . XOWL_PLUGIN_URL . '/assets/css/styles.css' . "',";
+    echo "};";
+    echo "</script>";
 }
 
 // Capture post content and filter link attributes
@@ -77,13 +72,13 @@ function filter_post_data($data, $postarr) {
 add_filter('plugin_action_links_' . plugin_basename(plugin_dir_path(__FILE__) . 'wp-xowl-client.php'), array('XowlClient', 'admin_plugin_settings_link'), 10, 2);
 
 // TODO: parse Xowl response.
-function xowl_st($atts, $content) {
-    $a = shortcode_atts(array(
-        'entity' => '',
-            ), $atts);
-
-    return "<a href=\"" . $a['entity'] . "\">" . $content . "</a>";
-}
-
-add_shortcode('xowl', 'xowl_st');
+//function xowl_st($atts, $content) {
+//    $a = shortcode_atts(array(
+//        'entity' => '',
+//            ), $atts);
+//
+//    return "<a href=\"" . $a['entity'] . "\">" . $content . "</a>";
+//}
+//
+//add_shortcode('xowl', 'xowl_st');
 
