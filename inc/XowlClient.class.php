@@ -79,15 +79,15 @@ class XowlClient {
     }
 
     //Esta llamada registra el plugin. Crearemos un archivo Javascript dentro de nuestra carpeta del tema.
-    public static function wpse72394_register_tinymce_plugin($plugin_array) {
-        $plugin_array['wpse72394_button'] = plugins_url('..', __FILE__) . '/tinymce/xowl_client/editor_plugin.js';
+    public static function xowl_register_tinymce_plugin($plugin_array) {
+        $plugin_array['xowl_button'] = plugins_url('..', __FILE__) . '/tinymce/xowl_client/editor_plugin.js';
         return $plugin_array;
     }
 
     //Esta llamada añadirá el botón a la barra
-    public static function wpse72394_add_tinymce_button($buttons) {
+    public static function xowl_add_tinymce_button($buttons) {
         //Añadimos el ID del botón al array
-        $buttons[] = "wpse72394_button";
+        $buttons[] = "xowl_button";
         return $buttons;
     }
 

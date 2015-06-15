@@ -4,7 +4,7 @@
 (function ($) {
     var fillSuggestionsField, openXowlDialog, processSemantic, removeSuggestion, replaceXowlAnnotations;
     // Register the buttons
-    tinymce.create('tinymce.plugins.wpse72394_plugin', {
+    tinymce.create('tinymce.plugins.xowl_plugin', {
         init: function (ed) {
             var self = this;
             self.firstLoad = true;
@@ -56,7 +56,7 @@
             });
 
             // Enhance your content
-            ed.addButton('wpse72394_button', {
+            ed.addButton('xowl_button', {
                 title: 'Enhance your content',
                 //TODO: Search for a better Xowl icon
                 image: '../wp-content/plugins/wp-xowl-client/assets/imgs/enhance.png',
@@ -88,7 +88,7 @@
         }
     });
     /* Start the buttons */
-    tinymce.PluginManager.add('wpse72394_button', tinymce.plugins.wpse72394_plugin);
+    tinymce.PluginManager.add('xowl_button', tinymce.plugins.xowl_plugin);
 
 // ----------------------------------------------------------------------------
 

@@ -33,10 +33,8 @@ add_action('init', array('XowlClient', 'init'));
 add_action('admin_menu', array('XowlClient', 'admin_menu'), 5);
 
 /* Add the TinyMCE Xowl Plugin */
-//add_filter('mce_external_plugins', array('XowlClient', 'xowl_client_plugin'));
-//add_action('admin_init', array('XowlClient', 'xowl_tinymce_button'));
-add_filter("mce_external_plugins", array('XowlClient', "wpse72394_register_tinymce_plugin"));
-add_filter('mce_buttons', array('XowlClient', 'wpse72394_add_tinymce_button'));
+add_filter("mce_external_plugins", array('XowlClient', "xowl_register_tinymce_plugin"));
+add_filter('mce_buttons', array('XowlClient', 'xowl_add_tinymce_button'));
 
 // Pass variables from wordpress to tinymce
 foreach (array('post.php', 'post-new.php') as $hook) {
