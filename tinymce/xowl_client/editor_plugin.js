@@ -89,14 +89,15 @@
                     $('body').css("position", "relative").append($loader);
                     // make request and replace content according with response
                     // clean content before and after response
+                    var content = tinymce.activeEditor.getContent() ;
+
                     $.post(xowlPlugin.xowl_endpoint, {
                         token: xowlPlugin.xowl_apikey,
-                        content: tinymce.activeEditor.getContent()
+                        content: self.xsa.preClean( tinymce.activeEditor.getContent() )
                     }).done(function (data) {
                         $loader.remove();
                         self.xsa = new XowlSemanticAdapter();
-                        self.xsa.buildFromData(data);
-                        tinymce.activeEditor.setContent(self.xsa.textToEditor());
+                        tinymce.activeEditor.setContent(  self.xsa.buildFromData(data)  );
                     }).fail(function () {
                         $loader.remove();
                         self.xsa = new XowlSemanticAdapter();
@@ -106,6 +107,7 @@
             });
         }
     });
+
     /* Start the buttons */
     tinymce.PluginManager.add('xowl_button', tinymce.plugins.xowl_plugin);
 
@@ -122,7 +124,23 @@
 
     // parse server response and store in inner variables
     XowlSemanticAdapter.prototype.buildFromData = function (data) {
+
+
+        return data.text ; 
+
+
         var self = this;
+ 
+        var content = data.text ;
+        var $content2 = $(  $.parseHTML( data.text ) ) ;
+ 
+
+        console.log( $content2  ) ;
+
+        return $content2.html();
+        return ;
+
+
         var jq = $(data.text);
         var idx = 0;
         var changeHref = function (oldHref) {
@@ -149,12 +167,7 @@
         self.semantic = data.semantic;
     };
 
-    // return html with all attributes
-    XowlSemanticAdapter.prototype.textToEditor = function () {
-        var self = this;
-        return self.elementsData.html();
-    };
-
+  
     // return html with restricted attributes
     XowlSemanticAdapter.prototype.modifyEntity = function (index, newHref) {
         var self = this;
@@ -178,4 +191,33 @@
         element.replaceWith(element.html());
         tinymce.activeEditor.setContent(oldContent.html());
     };
+
+
+     XowlSemanticAdapter.prototype.preClean = function (content ) {
+        // returns string 
+        console.log( content );
+        var $content = $('<div></div>').append(  $.parseHTML( content) );
+
+        $('a', $content).each( function() {
+            if ( typeof $(this).attr( "data-cke-suggestions") == 'string' ) {
+
+                $(this).removeAttr("data-cke-suggestions" );
+                $(this).removeAttr("data-entity-position" );
+                $(this).removeAttr("data-cke-annotation" );
+                $(this).removeAttr("data-cke-type" );
+                $(this).removeClass("xowl-suggestion" );
+            }  else {
+                return ;
+            }
+
+        });
+        console.log( $content ) ;
+        console.log( $content.html() ) ;
+        return $content.html(); 
+
+     } ;
+
+
+
+
 })(jQuery);
