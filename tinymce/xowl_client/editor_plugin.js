@@ -19,8 +19,12 @@
 
                 // build select box
                 var entityPosition = ev.target.getAttribute('data-entity-position');
-                var si = self.xsa.semanticIndex[entityPosition];
                 var bodyValues = [];
+
+                if (typeof self.xsa.semantic[entityPosition] === 'undefined') {
+                    return;
+                }
+
                 $.each(self.xsa.semantic[entityPosition].entities, function (i, e) {
                     bodyValues.push({text: e["rdfs:label"].value + ' (' + e.uri + ')', value: e.uri});
                 });
@@ -117,17 +121,17 @@
     }
 
     // parse an anchor element and remove some attributes
-    XowlSemanticAdapter.prototype.filterAnchorAttributes = function (text) {
-        var self = this;
-        var jq = $(text);
-        var clone = $('<a>').text(jq.text());
-        $.each(jq.get(0).attributes, function (i, attrib) {
-            if (self.saveAttr[attrib.name]) {
-                clone.attr(attrib.name, attrib.value);
-            }
-        });
-        return clone;
-    };
+//    XowlSemanticAdapter.prototype.filterAnchorAttributes = function (text) {
+//        var self = this;
+//        var jq = $(text);
+//        var clone = $('<a>').text(jq.text());
+//        $.each(jq.get(0).attributes, function (i, attrib) {
+//            if (self.saveAttr[attrib.name]) {
+//                clone.attr(attrib.name, attrib.value);
+//            }
+//        });
+//        return clone;
+//    };
 
     // parse server response and store in inner variables
     XowlSemanticAdapter.prototype.buildFromData = function (data) {
@@ -137,8 +141,11 @@
         var changeHref = function (oldHref) {
             var patt = /(..\.)?(dbpedia.org\/resource\/)/;
             var match = patt.exec(oldHref);
-            var lang = (typeof match[1] === 'undefined') ? 'en.' : match[1];
-            return oldHref.replace(match[0], lang + 'wikipedia.org/wiki/');
+            if (match) {
+                var lang = (typeof match[1] === 'undefined') ? 'en.' : match[1];
+                return oldHref.replace(match[0], lang + 'wikipedia.org/wiki/');
+            }
+            return oldHref;
         };
 
 

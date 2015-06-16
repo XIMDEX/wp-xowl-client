@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Plugin Name: Xowl client
  * Plugin URI: http://demo.ximdex.com/xowl
@@ -7,7 +8,6 @@
  * Author: OXE development team
  * Author URI: http://www.ximdex.com/
  * */
-
 // Constants definition
 defined('ABSPATH') or die('Do not execute me naked, please!'); //Avoiding direct execution!
 define('XOWL_VERSION', '0.1');
@@ -57,12 +57,15 @@ function filter_post_data($data, $postarr) {
 
     // parse html and filter attributes
     $html = str_get_html($data['post_content']);
-    foreach ($html->find('a') as $elem) {
-        $elem->{'data-cke-annotation'} = null;
-        $elem->{'data-cke-suggestions'} = null;
-        $elem->{'data-cke-type'} = null;
-        $elem->{'data-entity-position'} = null;
+    if ($html) {
+        foreach ($html->find('a') as $elem) {
+            $elem->{'data-cke-annotation'} = null;
+            $elem->{'data-cke-suggestions'} = null;
+            $elem->{'data-cke-type'} = null;
+            $elem->{'data-entity-position'} = null;
+        }
     }
+
     // set post_content
     $data['post_content'] = $html . '';
     return $data;
