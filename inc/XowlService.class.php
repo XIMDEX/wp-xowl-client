@@ -55,7 +55,7 @@ class XowlService {
      * @return this. 
      */
     private function query($text) {
-        $token = get_option('xowl_usertoken', '000-00000-000');
+        $token = get_option('xowl_usertoken', '');
         $dataText = array(
             'token' => $token,
             'content' => $text

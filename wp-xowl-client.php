@@ -49,11 +49,10 @@ function my_admin_head() {
 add_filter('wp_insert_post_data', 'filter_post_data', '99', 2);
 
 function filter_post_data($data, $postarr) {
-
     $data['post_content'] = preg_replace('/<a class=\\\"xowl-suggestion\\\" (.*) data-cke-annotation=\\\"(.*)\\\" data-cke-type=\\\"(.*)\\\" data-cke-suggestions=\\\"(.*)\\\" data-entity-position=\\\"(.*)\\\">/iUs', '<a \1>' , $data['post_content'] );
     return $data;
 }
 
-add_filter('plugin_action_links_' . plugin_basename(plugin_dir_path(__FILE__) . 'wp-xowl-client.php'), array('XowlClient', 'admin_plugin_settings_link'), 10, 2);
+add_filter('plugin_action_links_' . XOWL_PLUGIN_URL . '/wp-xowl-client.php' ,  array('XowlClient', 'admin_plugin_settings_link'), 10, 2);
  
 

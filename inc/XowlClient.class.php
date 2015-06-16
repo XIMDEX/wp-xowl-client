@@ -45,8 +45,8 @@ class XowlClient {
     }
     
     private static function load_xowl_styles() {
-        wp_register_style('styles.css', '/wp-content/plugins/wp-xowl-client/assets/css/styles.css', array() , false);
-        wp_enqueue_style('styles.css');
+        wp_register_style('XowlClient', '/wp-content/plugins/wp-xowl-client/assets/css/styles.css', array() , false);
+        wp_enqueue_style('XowlClient');
     }
     
     private static function init_hooks() {
