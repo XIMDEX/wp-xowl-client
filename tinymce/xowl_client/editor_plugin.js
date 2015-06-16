@@ -18,15 +18,13 @@
                 }
 
 
-                console.log( ev.target ) ;
-                
+                 
                 // build select box
                 var entityPosition = ev.target.getAttribute('data-entity-position');
                 var bodyValues = [];
 
 
-                console.log( ev.target ) ;
-
+ 
                 if (typeof self.xsa.semantic[entityPosition] === 'undefined') {
                     return;
                 }
@@ -192,13 +190,27 @@
 
         var count = 0 ; 
 
+                var changeHref = function (oldHref) {
+            var patt = /(..\.)?(dbpedia.org\/resource\/)/;
+            var match = patt.exec(oldHref);
+            if (match) {
+                var lang = (typeof match[1] === 'undefined') ? 'en.' : match[1];
+                return oldHref.replace(match[0], lang + 'wikipedia.org/wiki/');
+            }
+            return oldHref;
+        };
+
+
         $( 'a.xowl-suggestion', $content ).each( function() {
                 $(this).attr('data-entity-position', count );
                 $(this).attr('target', '_blank');
+              //   $(this).attr( 'href', changeHref( $(this).attr( 'href')));
                 count++ ;
 
 
         });
+
+
 
 
 
