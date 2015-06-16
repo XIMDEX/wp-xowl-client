@@ -2,7 +2,6 @@
  * plugin for tinymce and wordpress accessing xowl service
  */
 (function ($) {
-    var fillSuggestionsField, openXowlDialog, processSemantic, removeSuggestion, replaceXowlAnnotations;
     // Register the buttons
     tinymce.create('tinymce.plugins.xowl_plugin', {
         init: function (ed) {
@@ -13,48 +12,65 @@
             // listen click inside textarea
             ed.on('click', function (ev) {
                 tinymce.activeEditor.dom.loadCSS('../wp-content/plugins/wp-xowl-client/assets/css/styles.css');
-                if (!self.xsa.ok || ev.originalTarget.className === "") {
+
+                if (!ev.target || ev.target.className === "") {
                     return;
                 }
 
-                // extract attribute value
-                var entityPosition = 0;
-                $.each(ev.explicitOriginalTarget.parentNode.attributes, function (i, e) {
-                    if (e.name === 'data-entity-position') {
-                        entityPosition = e.nodeValue;
-                        return false;
-                    }
-                });
-
                 // build select box
+                var entityPosition = ev.target.getAttribute('data-entity-position');
                 var si = self.xsa.semanticIndex[entityPosition];
                 var bodyValues = [];
-                $.each(self.xsa.elementsData[si].sem.entities, function (i, e) {
+                $.each(self.xsa.semantic[entityPosition].entities, function (i, e) {
                     bodyValues.push({text: e["rdfs:label"].value + ' (' + e.uri + ')', value: e.uri});
                 });
 
+                var listBox = new tinymce.ui.ListBox({
+                    name: 'selectedEntity',
+                    label: 'Select Entities',
+                    values: bodyValues
+                });
+                listBox.entityPosition = entityPosition;
+
                 tinymce.activeEditor.windowManager.open({
+                    elem: this,
                     title: 'Select Entity Dialog',
-                    body: [{
-                            type: 'listbox',
-                            name: 'selectedEntity',
-                            label: 'Select Entities',
-                            values: bodyValues
-                        }],
+                    body: [listBox],
+                    buttons: [
+                        {
+                            text: 'Aceptar',
+                            onclick: function () {
+                                this.parent().fire('submit', {entityPosition: entityPosition});
+                            }
+                        },
+                        {
+                            text: 'Cancelar',
+                            onclick: function () {
+                                this.parent().fire('cancel');
+                            }
+                        },
+                        {
+                            text: 'Remove',
+                            onclick: function () {
+                                self.xsa.removeEntity(entityPosition);
+                                this.parent().fire('cancel');
+                            }
+                        }
+                    ],
                     // rebuild content inside textarea
-                    onsubmit: function (sel) {
-                        self.xsa.modifyEntity(entityPosition, sel.data.selectedEntity);
-                        tinymce.activeEditor.setContent(self.xsa.textToEditor());
+                    onsubmit: function (ev) {
+//                        console.log('ev.selectedEntity', ev.entityPosition);
+//                        self.xsa.removeEntity(entityPosition);
+//                        tinymce.activeEditor.setContent(self.xsa.textToEditor());
                     }
                 });
-            });
 
+            });
             // init xsa object
             ed.on('LoadContent', function () {
                 self.firstLoad = true;
                 self.xsa.buildFromData({semantic: [], text: tinymce.activeEditor.getContent()});
             });
-
             // Enhance your content
             ed.addButton('xowl_button', {
                 title: 'Enhance your content',
@@ -67,7 +83,6 @@
                     });
                     $("<img/>").attr('src', '../wp-content/plugins/wp-xowl-client/assets/imgs/loader.gif').appendTo($loader);
                     $('body').css("position", "relative").append($loader);
-
                     // make request and replace content according with response
                     // clean content before and after response
                     $.post(xowlPlugin.xowl_endpoint, {
@@ -98,7 +113,6 @@
         this.semanticIndex = [];
         this.elementsData = [];
         this.semanticText = '';
-        this.ok = false;
         this.saveAttr = {'class': 1, 'href': 1, 'target': 1};
     }
 
@@ -107,48 +121,19 @@
         var self = this;
         var jq = $(text);
         var clone = $('<a>').text(jq.text());
-
         $.each(jq.get(0).attributes, function (i, attrib) {
             if (self.saveAttr[attrib.name]) {
                 clone.attr(attrib.name, attrib.value);
             }
         });
-
         return clone;
-    };
-
-    // parse raw text
-    XowlSemanticAdapter.prototype.parseText = function (text) {
-        var self = this;
-        var html = $(text);
-        var htmlClone = $('<p>');
-        var arrayText = [];
-
-        html.contents().each(function (i, elem) {
-            if (elem.nodeType === 3) {
-                arrayText.push(elem.nodeValue);
-            }
-            else {
-                var clone = self.filterAnchorAttributes(elem);
-                arrayText.push(clone.get(0).outerHTML);
-            }
-        });
-
-        htmlClone.html(arrayText.join(""));
-        return htmlClone;
     };
 
     // parse server response and store in inner variables
     XowlSemanticAdapter.prototype.buildFromData = function (data) {
         var self = this;
-
-        if (typeof data.semantic === 'undefined' || data.semantic.length === 0) {
-            var parsed = self.parseText(data.text);
-            self.semanticText = parsed.html();
-            self.ok = false;
-            return;
-        }
-
+        var jq = $(data.text);
+        var idx = 0;
         var changeHref = function (oldHref) {
             var patt = /(..\.)?(dbpedia.org\/resource\/)/;
             var match = patt.exec(oldHref);
@@ -156,61 +141,30 @@
             return oldHref.replace(match[0], lang + 'wikipedia.org/wiki/');
         };
 
-        var idx = 0;
-        self.ok = true;
-        var html = $.parseHTML(data.text);
-        $.each(html[0].childNodes, function (i, elem) {
-            if (elem.nodeType === 3) {
-                self.elementsData.push({type: 3, elem: elem.nodeValue});
-            }
-            else {
-                if (typeof elem.attributes != "undefined" && elem.attributes.getNamedItem("data-cke-suggestions") ) {
-                    var e1 = $(elem);
-                    // add position to help manipulation
-                    e1.attr("data-entity-position", idx);
 
-                    // replace dbpedia link
-                    var oldHref = e1.attr("href");
-                    e1.attr("href", changeHref(oldHref));
-                    e1.attr("target", '_blank');
-
-                    if (typeof data.semantic[idx] !== 'undefined') {
-                        // replace dbpedia link
-                        $.each(data.semantic[idx].entities, function (i, elem) {
-                            elem.uri = changeHref(elem.uri);
-                        });
-                        
-                        self.semanticIndex.push(self.elementsData.length);
-                        self.elementsData.push({type: 1, sem: data.semantic[idx], elem: e1.get(0)});
-                    }
-                    idx++;
-                }
-                else {
-                    self.elementsData.push({type: 2, elem: elem.outerHTML});
-                }
+        $.each(jq.contents(), function (i, e) {
+            if (e.nodeType === 1) {
+                e.setAttribute('data-entity-position', idx);
+                e.setAttribute('target', '_blank');
+                var oldHref = e.getAttribute('href');
+                var newHref = changeHref(oldHref);
+                e.setAttribute('href', newHref);
+                idx++;
             }
         });
+        self.elementsData = jq;
+        self.semantic = data.semantic;
     };
 
     // return html with all attributes
     XowlSemanticAdapter.prototype.textToEditor = function () {
         var self = this;
-
-        if (self.ok) {
-            var newP = $("<p>");
-            $.each(self.elementsData, function (i, obj) {
-                newP.append(obj.elem);
-            });
-            self.semanticText = newP.html();
-        }
-
-        return self.semanticText;
+        return self.elementsData.html();
     };
 
     // return html with restricted attributes
     XowlSemanticAdapter.prototype.modifyEntity = function (index, newHref) {
         var self = this;
-
         if (!self.ok) {
             return;
         }
@@ -224,5 +178,11 @@
         self.elementsData[idx].elem = wrap.html();
     };
 
-
+    // return html with restricted attributes
+    XowlSemanticAdapter.prototype.removeEntity = function (position) {
+        var oldContent = $(tinymce.activeEditor.getContent());
+        var element = $('a.xowl-suggestion[data-entity-position="' + position + '"]', oldContent).eq(0);
+        element.replaceWith(element.html());
+        tinymce.activeEditor.setContent(oldContent.html());
+    };
 })(jQuery);

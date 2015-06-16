@@ -10,8 +10,8 @@
 
 // Constants definition
 defined('ABSPATH') or die('Do not execute me naked, please!'); //Avoiding direct execution!
-define('XOWL_VERSION', '1.0.0');
-define('XOWL_MINIMUM_WP_VERSION', '3.2');
+define('XOWL_VERSION', '0.1');
+define('XOWL_MINIMUM_WP_VERSION', '4.2');
 define('XOWL_PLUGIN_URL', plugin_dir_url(__FILE__));
 define('XOWL_PLUGIN_DIR', plugin_dir_path(__FILE__));
 

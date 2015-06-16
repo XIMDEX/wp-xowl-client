@@ -4,9 +4,9 @@
 
         function setSpanText(error) {
             if (error) {
-                $('#is-valid-token').html('token inválido').addClass('token-invalid');
+                $('#is-valid-token').html(' Invalid token').removeClass('token-valid').addClass('token-invalid');
             } else {
-                $('#is-valid-token').html('token válido').addClass('token-valid');
+                $('#is-valid-token').html(' Valid token!').removeClass('token-invalid').addClass('token-valid');
             }
         }
 
@@ -19,17 +19,17 @@
             checkUrl.push("check");
 
             $.post(checkUrl.join("/"), {token: activeApiToken})
-                    .done(function (data) {
-                        if (data.status === 'ok') {
-                            setSpanText(false);
-                        }
-                        else {
-                            setSpanText(true);
-                        }
-                    })
-                    .fail(function () {
-                        setSpanText(true);
-                    });
+            .done(function (data) {
+                if (data.status === 'ok') {
+                    setSpanText(false);
+                }
+                else {
+                    setSpanText(true);
+                }
+            })
+            .fail(function () {
+                setSpanText(true);
+            });
         });
     });
 })(jQuery);
