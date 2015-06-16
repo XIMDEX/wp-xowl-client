@@ -32,7 +32,7 @@
     }
     XowlService.prototype.setContent = function(content) {
         tinymce.activeEditor.setContent(content);
-    }
+    };
     XowlService.prototype.postReceive = function(content) {
         // returns string 
         var $content = $('<div></div>').append($.parseHTML(content));
@@ -54,7 +54,17 @@
             url = url.replace(match[0], lang + 'wikipedia.org/wiki/');
         }
         return url;
-    }
+    };
+    XowlService.prototype.changeUri = function( position, newValue ) {
+        var self = this;
+
+        var content = $('<div></div>').append($.parseHTML( self.getContent()  ));
+        var element = $('a.xowl-suggestion[data-entity-position="' + position + '"]', content).eq(0);
+        element.attr( 'href', newValue) ;
+        self.setContent( content.html());
+    };
+   
+
     var XowlClient = new XowlService();
     // Register the buttons
     tinymce.create('tinymce.plugins.xowl_plugin', {
@@ -63,59 +73,69 @@
             self.firstLoad = true;
             // listen click inside textarea
             ed.on('click', function(ev) {
-                if (!ev.target || ev.target.className === "") {
-                    return;
-                }
-                // build select box
-                var entityPosition = ev.target.getAttribute('data-entity-position');
-                var bodyValues = [];
-                if (typeof XowlClient.semantic[entityPosition] === 'undefined') {
-                    return;
-                }
-                $.each(XowlClient.semantic[entityPosition].entities, function(i, e) {
-                    var label = "";
-                    if (typeof e["rdfs:label"].value === "string") {
-                        label = e["rdfs:label"].value;
-                    } else {
-                        label = e["rdfs:label"][0].value;
-                    }
-                    bodyValues.push({
-                        text: label + ' (' + XowlClient.changeUrl(e.uri) + ')',
-                        value: XowlClient.changeUrl(e.uri)
-                    });
-                });
-                var listBox = new tinymce.ui.ListBox({
-                    name: 'selectedEntity',
-                    label: 'Select Entities',
-                    values: bodyValues
-                });
-                listBox.entityPosition = entityPosition;
-                tinymce.activeEditor.windowManager.open({
-                    elem: this,
-                    title: 'Select Entity Dialog',
-                    body: [listBox],
-                    buttons: [{
-                        text: 'Aceptar',
-                        onclick: function() {
-                            this.parent().fire('submit', {
-                                entityPosition: entityPosition
-                            });
-                        }
-                    }, {
-                        text: 'Cancelar',
-                        onclick: function() {
-                            this.parent().fire('cancel');
-                        }
-                    }, {
-                        text: 'Remove',
-                        onclick: function() {
-                            self.xsa.removeEntity(entityPosition);
-                            this.parent().fire('cancel');
-                        }
-                    }],
-                    // rebuild content inside textarea
-                    onsubmit: function(ev) {}
-                });
+                
+                    console.log( ev ) ;
+
+var entityPosition = ev.target.getAttribute('data-entity-position');
+if (entityPosition > "" && ev.target.className === "xowl-suggestion" && typeof XowlClient.semantic[entityPosition] === 'object') {
+    var bodyValues = [];
+    var currentUrl = ev.target.getAttribute('href');
+    $.each(XowlClient.semantic[entityPosition].entities, function(i, e) {
+        var label = "";
+        if (typeof e["rdfs:label"].value === "string") {
+            label = e["rdfs:label"].value;
+        } else {
+            label = e["rdfs:label"][0].value;
+        }
+        bodyValues.push({
+            text: label + ' (' + XowlClient.changeUrl(e.uri) + ')',
+            value: XowlClient.changeUrl(e.uri) 
+        });
+        console.log(e );
+    });
+    var listBox = new tinymce.ui.ListBox({
+        name: 'selectedEntity',
+        label: 'Select Entities',
+        values: bodyValues,
+        onselect: function(v) {
+            currentUrl =  v.control.value() ;
+            return true;
+        }
+    });
+    listBox.value( currentUrl);
+    // var currentValue = console.log(e ) ;
+     tinymce.activeEditor.windowManager.open({
+        elem: this,
+        title: 'Select Entity Dialog',
+        body: [listBox],
+        buttons: [{
+            text: 'Aceptar',
+            onclick: function() {
+                XowlClient.changeUri( entityPosition, currentUrl);
+                                this.parent().fire('submit');
+
+            }
+        }, {
+            text: 'Cancelar',
+            onclick: function() {
+                this.parent().fire('cancel');
+            }
+        }, {
+            text: 'Remove',
+            onclick: function() {
+                self.xsa.removeEntity(entityPosition);
+                this.parent().fire('cancel');
+            }
+        }],
+        // rebuild content inside textarea
+        onsubmit: function(ev) {
+            console.log(ev);
+        }
+    });
+}
+
+
+
             });
             // init xsa object
             ed.on('LoadContent', function() {});
