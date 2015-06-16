@@ -13,7 +13,9 @@ When you save and publish the post, the entities will be translated into their r
 
 ## Screenshots
 
+For example, enhancing some post about **Radiohead**:
 ![Enhancing your post content ](/assets/imgs/screenshots/enhancement01.png)
 
-![Selecting the correct entity ](/assets/imgs/screenshots/enhancement02.png)
+And selecting the proper entity for the entity **United Kingdom**:
+![Selecting the proper entity ](/assets/imgs/screenshots/enhancement02.png)
 
