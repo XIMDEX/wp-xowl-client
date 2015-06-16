@@ -45,7 +45,7 @@ class XowlClient {
     }
     
     private static function load_xowl_styles() {
-        wp_register_style('XowlClient', '/wp-content/plugins/wp-xowl-client/assets/css/styles.css', array() , false);
+        wp_register_style('XowlClient', XOWL_PLUGIN_URL . '/assets/css/styles.css', array() , false);
         wp_enqueue_style('XowlClient');
     }
     
@@ -63,7 +63,7 @@ class XowlClient {
     
     //Esta llamada registra el plugin. Crearemos un archivo Javascript dentro de nuestra carpeta del tema.
     public static function xowl_register_tinymce_plugin($plugin_array) {
-        $plugin_array['xowl_button'] = plugins_url('..', __FILE__) . '/tinymce/xowl_client/editor_plugin.js';
+        $plugin_array['xowl_button'] = XOWL_PLUGIN_URL . '/tinymce/xowl_client/editor_plugin.js';
         return $plugin_array;
     }
     
@@ -91,7 +91,7 @@ class XowlClient {
     }
     
     public static function admin_menu() {
-        $hook = add_options_page('Xowl Configuration', 'Xowl client', 'manage_options', 'xowl-config', array(
+        $hook = add_options_page('Xowl Configuration', 'Xowl Service', 'manage_options', 'xowl-config', array(
             'XowlClient',
             'display_page'
         ));
