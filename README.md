@@ -1,12 +1,12 @@
 # Xowl Service client for WordPress
 
-Hemos desarrollado un plugin que trabaja con la última versión de Wordpress (v4.2.2) que se encarga de enriquecer semánticamente el contenido de los posts redactados. 
+We have developed a plugin that works with the latest version of Wordpress (v4.2.2) that is capable of semantically enrich the content of your written posts.
 
-Se pueden bajar directamente el ZIP e instalarlo como cualquier plugin de WordPress, es decir, descomprimirlo en la carpeta wp-content/plugins y ya el propio WordPress debería reconocerlo como plugin desde su interfaz.
+## Installing instructions
+You can directly download the ZIP and install it as any WordPress plugin, that is, unzip it on the _wp-content/plugins_ folder and WordPress itself should recognize it as plugin from its user interface.
 
-Se instala y habrá que solicitar una API-Key en nuestra página de registro. La URL de dicha página la proporciona el propio módulo para que el usuario se registre fácilmente y sin problemas.
-Una vez chequado que el token copiado de nuestra cuenta es correcto, nos vamos a un post con un contenido susceptible de ser enriquecido y veremos que hay un nuevo icono en la barra de herramientas del TinyMCE con forma de etiqueta.
+It is installed and will have to apply for an API-Key in our registration page. The URL of this page is provided by the module itself to the user record easily and smoothly. Once the token copied chequado our account is correct, we go to a post with a capable of being rich content and see that there is a new icon in the toolbar TinyMCE shaped label.
 
-Pulsaremos y veremos como nuestro contenido se enriquece con entidades de diferentes colores según su tipo. Si hay varias menciones para una misma entidad, podremos desambiguar para elegir la que más se adapte a nuestro contexto.
+Will press and see how our content is enriched with entities of different colors depending on its type. If there are multiple references to a single entity, we can disambiguate to choose the one that best suits our context.
 
-Al guardar y publicar el post, los entidades se traducirán a sus respectivos enlaces a la wikipedia donde podremos encontrar más información de cada una de ellas.
+When you save and publish the post, the entities will be translated into their respective links to wikipedia where we can find more information about each of them.
