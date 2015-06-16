@@ -49,24 +49,8 @@ function my_admin_head() {
 add_filter('wp_insert_post_data', 'filter_post_data', '99', 2);
 
 function filter_post_data($data, $postarr) {
-    /*
-    require_once XOWL_PLUGIN_DIR . 'inc/simple_html_dom.php';
-    error_log("FILTER post data before save...\n", 3, "/tmp/wp.log");
 
-    // parse html and filter attributes
-    $html = str_get_html($data['post_content']);
-    if ($html) {
-        foreach ($html->find('a') as $elem) {
-            $elem->{'data-cke-annotation'} = null;
-            $elem->{'data-cke-suggestions'} = null;
-            $elem->{'data-cke-type'} = null;
-            $elem->{'data-entity-position'} = null;
-        }
-    }
-
-    // set post_content
-    $data['post_content'] = $html . '';
-    */
+    $data['post_content'] = preg_replace('/<a class=\\\"xowl-suggestion\\\" (.*) data-cke-annotation=\\\"(.*)\\\" data-cke-type=\\\"(.*)\\\" data-cke-suggestions=\\\"(.*)\\\" data-entity-position=\\\"(.*)\\\">/iUs', '<a \1>' , $data['post_content'] );
     return $data;
 }
 
