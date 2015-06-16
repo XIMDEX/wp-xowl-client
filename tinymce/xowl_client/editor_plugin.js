@@ -81,7 +81,7 @@
                     }).fail(function () {
                         $loader.remove();
                         self.xsa = new XowlSemanticAdapter();
-                        alert("Error retrieving content from Xowl Service");
+                        alert("Error retrieving content from Xowl Service.\nDo you have a valid API-KEY?");
                     });
                 }
             });
@@ -164,7 +164,7 @@
                 self.elementsData.push({type: 3, elem: elem.nodeValue});
             }
             else {
-                if (elem.attributes.getNamedItem("data-cke-suggestions")) {
+                if (typeof elem.attributes != "undefined" && elem.attributes.getNamedItem("data-cke-suggestions") ) {
                     var e1 = $(elem);
                     // add position to help manipulation
                     e1.attr("data-entity-position", idx);
