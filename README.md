@@ -10,3 +10,10 @@ It is installed and will have to apply for an API-Key in our registration page. 
 Will press and see how our content is enriched with entities of different colors depending on its type. If there are multiple references to a single entity, we can disambiguate to choose the one that best suits our context.
 
 When you save and publish the post, the entities will be translated into their respective links to wikipedia where we can find more information about each of them.
+
+## Screenshots
+
+![Enhancing your post content ](/assets/imgs/screenshots/enhancement01.png)
+
+![Selecting the correct entity ](/assets/imgs/screenshots/enhancement02.png)
+
