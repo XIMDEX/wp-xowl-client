@@ -17,9 +17,15 @@
                     return;
                 }
 
+
+                console.log( ev.target ) ;
+                
                 // build select box
                 var entityPosition = ev.target.getAttribute('data-entity-position');
                 var bodyValues = [];
+
+
+                console.log( ev.target ) ;
 
                 if (typeof self.xsa.semantic[entityPosition] === 'undefined') {
                     return;
@@ -97,7 +103,7 @@
                     }).done(function (data) {
                         $loader.remove();
                         self.xsa = new XowlSemanticAdapter();
-                        tinymce.activeEditor.setContent(  self.xsa.buildFromData(data)  );
+                        tinymce.activeEditor.setContent( self.xsa.postReceive( self.xsa.buildFromData(data) )  );
                     }).fail(function () {
                         $loader.remove();
                         self.xsa = new XowlSemanticAdapter();
@@ -124,47 +130,9 @@
 
     // parse server response and store in inner variables
     XowlSemanticAdapter.prototype.buildFromData = function (data) {
-
-
-        return data.text ; 
-
-
         var self = this;
- 
-        var content = data.text ;
-        var $content2 = $(  $.parseHTML( data.text ) ) ;
- 
-
-        console.log( $content2  ) ;
-
-        return $content2.html();
-        return ;
-
-
-        var jq = $(data.text);
-        var idx = 0;
-        var changeHref = function (oldHref) {
-            var patt = /(..\.)?(dbpedia.org\/resource\/)/;
-            var match = patt.exec(oldHref);
-            if (match) {
-                var lang = (typeof match[1] === 'undefined') ? 'en.' : match[1];
-                return oldHref.replace(match[0], lang + 'wikipedia.org/wiki/');
-            }
-            return oldHref;
-        };
-
-        $.each(jq.contents(), function (i, e) {
-            if (typeof e.getAttribute === 'function' && e.getAttribute("data-cke-suggestions")) {
-                e.setAttribute('data-entity-position', idx);
-                e.setAttribute('target', '_blank');
-                var oldHref = e.getAttribute('href');
-                var newHref = changeHref(oldHref);
-                e.setAttribute('href', newHref);
-                idx++;
-            }
-        });
-        self.elementsData = jq;
         self.semantic = data.semantic;
+        return data.text ; 
     };
 
   
@@ -186,7 +154,9 @@
 
     // return html with restricted attributes
     XowlSemanticAdapter.prototype.removeEntity = function (position) {
-        var oldContent = $(tinymce.activeEditor.getContent());
+
+        var oldContent = $('<div></div>').append(  $.parseHTML( tinymce.activeEditor.getContent() ) );
+
         var element = $('a.xowl-suggestion[data-entity-position="' + position + '"]', oldContent).eq(0);
         element.replaceWith(element.html());
         tinymce.activeEditor.setContent(oldContent.html());
@@ -195,8 +165,7 @@
 
      XowlSemanticAdapter.prototype.preClean = function (content ) {
         // returns string 
-        console.log( content );
-        var $content = $('<div></div>').append(  $.parseHTML( content) );
+         var $content = $('<div></div>').append(  $.parseHTML( content) );
 
         $('a', $content).each( function() {
             if ( typeof $(this).attr( "data-cke-suggestions") == 'string' ) {
@@ -211,8 +180,32 @@
             }
 
         });
-        console.log( $content ) ;
-        console.log( $content.html() ) ;
+     
+        return $content.html(); 
+
+     } ;
+
+
+     XowlSemanticAdapter.prototype.postReceive = function (content ) {
+        // returns string 
+         var $content = $('<div></div>').append(  $.parseHTML( content) );
+
+        var count = 0 ; 
+
+        $( 'a.xowl-suggestion', $content ).each( function() {
+                $(this).attr('data-entity-position', count );
+                $(this).attr('target', '_blank');
+                count++ ;
+
+
+        });
+
+
+
+ 
+
+
+      
         return $content.html(); 
 
      } ;
