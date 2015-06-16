@@ -32,13 +32,14 @@
                 <div class="xowl-step-row">
                     <div class="xowl-step-left">
                         <h4>Enter a Endpoint</h4>
-                        <p>After that, type the given <strong>API-KEY</strong> on the next input in order to validate it. <strong>Enjoy!</strong></p>
+                        <p>Type below the <strong>Service URL</strong> to point out your Wordpress. We already give you one by default.</p>
                     </div>
 
                     <div class="xowl-step-left">
                         <label for="active-api-endpoint">ENDPOINT:</label>
-                        <input id="active-api-endpoint" type="text" name="xowl_endpoint" value="<?= get_option('xowl_endpoint') ?>"/>
-                        <input type="submit" value="Guardar cambios" class="button button-primary">
+                        <input id="active-api-endpoint" type="text" name="xowl_endpoint" value="<?= get_option('xowl_endpoint') ?>" size="60"/>
+                        <br/>
+                        <input type="submit" value="Save Changes" class="button button-primary">
                         <!--<button type="submit" class="button button-primary">submit</button>-->
                     </div>
                 </div>

@@ -30,7 +30,7 @@ class XowlClient {
     public static function init() {
         if (!self::$initiated) {
 
-            add_option('XOWL_ENDPOINT', 'http://x8.ximdex.net/xowl/api/v1/enhance');
+            add_option('XOWL_ENDPOINT', 'http://x8.ximdex.net/api/v1/enhance');
             //saving API KEY on Wordpress db.
             if (get_option('XOWL_API_KEY') == false) {
                 add_option('XOWL_API_KEY', '0000-00-0000');
