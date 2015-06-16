@@ -19,3 +19,5 @@ For example, enhancing some post about **Radiohead**:
 And selecting the proper entity for the entity **United Kingdom**:
 ![Selecting the proper entity ](/assets/imgs/screenshots/enhancement02.png)
 
+Finally, your published post looks like something like this:
+![Published post ](/assets/imgs/screenshots/enhancement03.png)
