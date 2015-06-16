@@ -56,7 +56,7 @@ class XowlClient {
         add_option('xowl_endpoint', 'http://x8.ximdex.net/api/v1/enhance' , true );
         add_option('xowl_apikey', '', true);
         add_option('xowl_register', 'http://x8.ximdex.net/register/signup', '', true);
-      }
+      } 
     
     public static function plugin_deactivation() {
     }
@@ -103,7 +103,7 @@ class XowlClient {
     
     private static function updateVar($name) {
         if (!empty($_POST[$name]) && get_option($name) != $_POST[$name]) {
-            update_option($name, $_POST[$name]);
+            update_option($name, trim( $_POST[$name]) );
         }
     }
     
