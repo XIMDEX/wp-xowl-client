@@ -120,19 +120,6 @@
         this.saveAttr = {'class': 1, 'href': 1, 'target': 1};
     }
 
-    // parse an anchor element and remove some attributes
-//    XowlSemanticAdapter.prototype.filterAnchorAttributes = function (text) {
-//        var self = this;
-//        var jq = $(text);
-//        var clone = $('<a>').text(jq.text());
-//        $.each(jq.get(0).attributes, function (i, attrib) {
-//            if (self.saveAttr[attrib.name]) {
-//                clone.attr(attrib.name, attrib.value);
-//            }
-//        });
-//        return clone;
-//    };
-
     // parse server response and store in inner variables
     XowlSemanticAdapter.prototype.buildFromData = function (data) {
         var self = this;
@@ -148,9 +135,8 @@
             return oldHref;
         };
 
-
         $.each(jq.contents(), function (i, e) {
-            if (e.nodeType === 1 && e.getAttribute("data-cke-suggestions")) {
+            if (typeof e.getAttribute === 'function' && e.getAttribute("data-cke-suggestions")) {
                 e.setAttribute('data-entity-position', idx);
                 e.setAttribute('target', '_blank');
                 var oldHref = e.getAttribute('href');
