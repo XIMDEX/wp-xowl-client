@@ -49,6 +49,7 @@ function my_admin_head() {
 add_filter('wp_insert_post_data', 'filter_post_data', '99', 2);
 
 function filter_post_data($data, $postarr) {
+    /*
     require_once XOWL_PLUGIN_DIR . 'inc/simple_html_dom.php';
     error_log("FILTER post data before save...\n", 3, "/tmp/wp.log");
 
@@ -65,20 +66,10 @@ function filter_post_data($data, $postarr) {
 
     // set post_content
     $data['post_content'] = $html . '';
+    */
     return $data;
 }
 
-// Links in config tab
 add_filter('plugin_action_links_' . plugin_basename(plugin_dir_path(__FILE__) . 'wp-xowl-client.php'), array('XowlClient', 'admin_plugin_settings_link'), 10, 2);
-
-// TODO: parse Xowl response.
-//function xowl_st($atts, $content) {
-//    $a = shortcode_atts(array(
-//        'entity' => '',
-//            ), $atts);
-//
-//    return "<a href=\"" . $a['entity'] . "\">" . $content . "</a>";
-//}
-//
-//add_shortcode('xowl', 'xowl_st');
+ 
 
