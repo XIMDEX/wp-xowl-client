@@ -11,7 +11,6 @@
 
             // listen click inside textarea
             ed.on('click', function (ev) {
-                console.log('click\n', ev);
                 tinymce.activeEditor.dom.loadCSS('../wp-content/plugins/wp-xowl-client/assets/css/styles.css');
 
                 if (!ev.target || ev.target.className === "") {
@@ -140,15 +139,12 @@
         var jq = $(data.text);
         var idx = 0;
         var changeHref = function (oldHref) {
-            console.log('change old: ' + oldHref);
             var patt = /(..\.)?(dbpedia.org\/resource\/)/;
             var match = patt.exec(oldHref);
             if (match) {
                 var lang = (typeof match[1] === 'undefined') ? 'en.' : match[1];
-                console.log('change new: ', oldHref.replace(match[0], lang + 'wikipedia.org/wiki/'));
                 return oldHref.replace(match[0], lang + 'wikipedia.org/wiki/');
             }
-            console.log('change new: ', oldHref);
             return oldHref;
         };
 
