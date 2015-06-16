@@ -11,6 +11,7 @@
 
             // listen click inside textarea
             ed.on('click', function (ev) {
+                console.log('click\n', ev);
                 tinymce.activeEditor.dom.loadCSS('../wp-content/plugins/wp-xowl-client/assets/css/styles.css');
 
                 if (!ev.target || ev.target.className === "") {
@@ -150,7 +151,7 @@
 
 
         $.each(jq.contents(), function (i, e) {
-            if (e.nodeType === 1) {
+            if (e.nodeType === 1 && e.getAttribute("data-cke-suggestions")) {
                 e.setAttribute('data-entity-position', idx);
                 e.setAttribute('target', '_blank');
                 var oldHref = e.getAttribute('href');
