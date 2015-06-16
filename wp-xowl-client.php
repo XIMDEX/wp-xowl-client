@@ -21,9 +21,6 @@ require_once( XOWL_PLUGIN_DIR . '/inc/XowlClient.class.php' );
 register_activation_hook(__FILE__, array('XowlClient', 'plugin_activation'));
 register_deactivation_hook(__FILE__, array('XowlClient', 'plugin_deactivation'));
 
-add_option('xowl_register', 'http://x8.ximdex.net/register/signup', '', 'yes');
-add_option('xowl_endpoint', 'http://x8.ximdex.net/api/v1', '', 'yes');
-
 // Activate the main stuff of the plugin
 add_action('init', array('XowlClient', 'init'));
 // Adding settings menu
