@@ -1,13 +1,19 @@
+        <form action="" method="POST">
 <div class="xowl-settings">
     <h2>
-        <img src="<?= plugins_url('../assets/imgs/logo-xowl.png', __FILE__); ?>" alt="XOWL Service" title="XOWL Service">
-        <img class="xowl-flower" src="<?= plugins_url('../assets/imgs/h2-flower.png', __FILE__) ?>">
+        <img src="<?=plugins_url('../assets/imgs/logo-xowl.png', __FILE__); ?>" alt="XOWL Service" title="XOWL Service">
+        
+                        
+        <img class="xowl-flower" src="<?=plugins_url('../assets/imgs/h2-flower.png', __FILE__) ?>">
+        <input type="submit" value="Save all the changes" class="button button-primary" style="float: right;">
+
+
     </h2>
 
     <div class="xowl-content">
         <h3>Welcome to the Xowl client configuration page!</h3>
         <p>An <strong>API-KEY</strong> is required to enrich your content with semantic references to the main <i>Semantic Data Stores</i> linked by this service.</p>
-
+    
         <!-- get-api-key -->
         <div class="xowl-get-api xowl-step">
             <div class="xowl-step-row">
@@ -19,14 +25,13 @@
                 </div>
 
                 <div class="xowl-step-right text-right">
-                    <a class="button button-primary" target="_blank" href="<?= get_option('xowl_register') ?>">get an api-key</a>
+                    <a class="button button-primary" target="_blank" href="<?=get_option('xowl_register') ?>">get an api-key</a>
                 </div>
             </div>
         </div>
         <!-- end get-api-key -->
 
         <!-- form -->
-        <form action="" method="POST">
             <!-- enter set endpoint -->
             <div class="xowl-endpoint xowl-step">
                 <div class="xowl-step-row">
@@ -37,7 +42,7 @@
 
                     <div class="xowl-step-left">
                         <label for="active-api-token">API-KEY:</label>
-                        <input id="active-api-token" type="text" name="xowl_apikey" value="<?= get_option('xowl_apikey') ?>"/>
+                        <input id="active-api-token" type="text" name="xowl_apikey" value="<?=get_option('xowl_apikey') ?>"/>
                         <button id="xowl-check-token" type="button" class="button button-primary">Check token</button>
                         <span id="is-valid-token" class=""></span>
                     </div>
@@ -55,15 +60,13 @@
 
                     <div class="xowl-step-left">
                         <label for="active-api-endpoint">ENDPOINT URL:</label>
-                        <input id="active-api-endpoint" type="text" name="xowl_endpoint" value="<?= get_option('xowl_endpoint') ?>" size="60"/>
+                        <input id="active-api-endpoint" type="text" name="xowl_endpoint" value="<?=get_option('xowl_endpoint') ?>" size="60"/>
                         <br/>
-                        <input type="submit" value="Save all the changes" class="button button-primary">
                         <!--<button type="submit" class="button button-primary">submit</button>-->
                     </div>
                 </div>
             </div>
             <!-- end set api key -->
-        </form>
         <!-- end form -->
 
         <!-- XOWL -->
@@ -74,6 +77,6 @@
         <!-- end XOWL -->
     </div>
 </div>
+        </form>
 
-<script src="http://code.jquery.com/jquery-1.11.3.min.js"></script>
-<script src="<?= plugins_url('../assets/js/config-form.js', __FILE__); ?>"></script>
+ <script src="<?=plugins_url('../assets/js/config-form.js', __FILE__); ?>"></script>
