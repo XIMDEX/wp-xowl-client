@@ -34,20 +34,29 @@ add_action('admin_menu', array('XowlClient', 'admin_menu'), 5);
 add_filter("mce_external_plugins", array('XowlClient', "xowl_register_tinymce_plugin"));
 add_filter('mce_buttons', array('XowlClient', 'xowl_add_tinymce_button'));
 
-// Passing variables from wordpress to tinymce
+// Pass variables from wordpress to tinymce
 foreach (array('post.php', 'post-new.php') as $hook) {
-    add_action("admin_head-$hook", 'my_admin_head');
+    add_action("admin_head-$hook", 'xowl_post_head');
 }
 
-function my_admin_head() {
-    echo "<script type='text/javascript'>";
-    echo "var xowlPlugin = {";
-    echo "   'xowl_endpoint': '" . get_option('xowl_endpoint') . "',";
-    echo "   'xowl_apikey': '" . get_option('xowl_apikey') . "',";
-    echo "   'xowl_css': '" . XOWL_PLUGIN_URL . '/assets/css/styles.css' . "',";
-    echo "};";
-    echo "</script>";
+function xowl_post_head() {
+
+
+    $conf = array(
+        'xowl_endpoint' =>  get_option('xowl_endpoint'),
+        'xowl_apikey' =>  get_option('xowl_apikey'),
+        'xowl_plugin_url' =>  XOWL_PLUGIN_URL   ,
+        'xowl_css' =>  XOWL_PLUGIN_URL . 'assets/css/styles.css' ,
+        );
+
+    $confJson = json_encode( $conf ) ;
+    echo <<<EOF
+    <script type='text/javascript'>
+    var xowlPlugin = {$confJson}
+    </script>
+EOF;
 }
+
 
 // Capture post content and filter link attributes
 add_filter('wp_insert_post_data', 'filter_post_data', '99', 2);
