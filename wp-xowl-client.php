@@ -49,7 +49,7 @@ function my_admin_head() {
 add_filter('wp_insert_post_data', 'filter_post_data', '99', 2);
 
 function filter_post_data($data, $postarr) {
-    $data['post_content'] = preg_replace('/<a class=\\\"xowl-suggestion\\\" (.*) data-cke-annotation=\\\"(.*)\\\" data-cke-type=\\\"(.*)\\\" data-cke-suggestions=\\\"(.*)\\\" data-entity-position=\\\"(.*)\\\">/iUs', '<a \1>' , $data['post_content'] );
+    $data['post_content'] = preg_replace('/<a class=\\\"xowl-suggestion\\\" (.*) data-entity-position=\\\"(.*)\\\" data-cke-annotation=\\\"(.*)\\\" data-cke-type=\\\"(.*)\\\" data-cke-suggestions=\\\"(.*)\\\">/iUs', '<a \1>' , $data['post_content'] );
     return $data;
 }
 
