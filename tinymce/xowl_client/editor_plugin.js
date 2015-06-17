@@ -2,7 +2,7 @@
  * plugin for tinymce and wordpress accessing xowl service
  */
 (function ($) {
-    var SELECTED_ENTITY_CLASS = 'xowl-selected';
+    var SELECTED_ENTITY_CLASS = 'data-xowl-selected';
     
     // clean contents before send to Xowl Service 
     var XowlService = function () {
@@ -13,7 +13,7 @@
         var $content = $('<div></div>').append($.parseHTML(this.getContent()));
         $('a', $content).each(function () {
             if (typeof $(this).attr("data-cke-suggestions") == 'string') {
-                $(this).removeClass(SELECTED_ENTITY_CLASS);
+                $(this).removeAttr(SELECTED_ENTITY_CLASS);
                 $(this).removeAttr("data-cke-suggestions");
                 $(this).removeAttr("data-entity-position");
                 $(this).removeAttr("data-cke-annotation");
@@ -72,12 +72,11 @@
         element.attr('href', newValue);
         self.setContent(content.html());
     };
-    XowlService.prototype.addClass = function (position, classname) {
+    XowlService.prototype.setSelected = function (position) {
         var self = this;
         var content = $('<div></div>').append($.parseHTML(self.getContent()));
         var element = $('a.xowl-suggestion[data-entity-position="' + position + '"]', content).eq(0);
-        element.addClass(classname);
-//        console.log('classname: ' + classname, "elemClass:" + element.attr('class'));
+        element.attr(SELECTED_ENTITY_CLASS, '1');
         self.setContent(content.html());
     };
 
@@ -139,7 +138,7 @@
                             }],
                         // rebuild content inside textarea
                         onsubmit: function () {
-                            XowlClient.addClass(entityPosition, SELECTED_ENTITY_CLASS);
+                            XowlClient.setSelected(entityPosition);
                         }
                     });
                 }
