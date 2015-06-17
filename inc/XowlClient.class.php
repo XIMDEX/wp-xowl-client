@@ -29,7 +29,6 @@ class XowlClient {
     
     public static function init() {
         if (!self::$initiated) {
-            
             $service = new XowlService(get_option('xowl_endpoint'));
             self::load_xowl_styles();
         }
@@ -60,17 +59,14 @@ class XowlClient {
     
     public static function plugin_deactivation() {
     }
-    
-    //Esta llamada registra el plugin. Crearemos un archivo Javascript dentro de nuestra carpeta del tema.
+
     public static function xowl_register_tinymce_plugin($plugin_array) {
         $plugin_array['xowl_button'] = XOWL_PLUGIN_URL . '/tinymce/xowl_client/editor_plugin.js';
         return $plugin_array;
     }
     
-    //Esta llamada añadirá el botón a la barra
+    //Adding the new button to the Tiny's toolbar
     public static function xowl_add_tinymce_button($buttons) {
-        
-        //Añadimos el ID del botón al array
         $buttons[] = "xowl_button";
         return $buttons;
     }
