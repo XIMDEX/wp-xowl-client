@@ -1,9 +1,11 @@
 # Xowl Service client for WordPress
 
-We have developed a plugin that works with the latest version of Wordpress (v4.2.2) that is capable of semantically enrich the content of your written posts.
+This WordPress plugin adds to your default editor (TinyMCE) the ability to detect **semantic entities** on your post content and link them to their official wikipedia page for further reading.
 
 ## Installing instructions
-You can directly download the ZIP and install it as any WordPress plugin, that is, unzip it on the _wp-content/plugins_ folder and WordPress itself should recognize it as plugin from its user interface.
+This plugin works with the latest version of Wordpress (v4.2.2)
+
+You can directly download the ZIP file and install it as any WordPress plugin, that is, unzip it on the _wp-content/plugins_ folder and WordPress itself should recognize it as plugin from its user interface.
 
 It is installed and will have to apply for an API-Key in our registration page. The URL of this page is provided by the module itself to the user record easily and smoothly. Once the token copied chequado our account is correct, we go to a post with a capable of being rich content and see that there is a new icon in the toolbar TinyMCE shaped label.
 
