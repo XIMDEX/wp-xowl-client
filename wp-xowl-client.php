@@ -7,22 +7,26 @@
  * Version: 1.0
  * Author: OXE development team
  * Author URI: http://www.ximdex.com/
- * */
+ *
+ */
+
 // Constants definition
-defined('ABSPATH') or die('Do not execute me naked, please!'); //Avoiding direct execution!
+defined('ABSPATH') or die('Do not execute me naked, please!');
+ //Avoiding direct execution!
 define('XOWL_VERSION', '0.1');
 define('XOWL_MINIMUM_WP_VERSION', '4.2');
 define('XOWL_PLUGIN_URL', plugin_dir_url(__FILE__));
 define('XOWL_PLUGIN_DIR', plugin_dir_path(__FILE__));
 
-require_once( XOWL_PLUGIN_DIR . '/inc/XowlService.class.php' );
-require_once( XOWL_PLUGIN_DIR . '/inc/XowlClient.class.php' );
+require_once (XOWL_PLUGIN_DIR . '/inc/XowlService.class.php');
+require_once (XOWL_PLUGIN_DIR . '/inc/XowlClient.class.php');
 
 register_activation_hook(__FILE__, array('XowlClient', 'plugin_activation'));
 register_deactivation_hook(__FILE__, array('XowlClient', 'plugin_deactivation'));
 
 // Activate the main stuff of the plugin
 add_action('init', array('XowlClient', 'init'));
+
 // Adding settings menu
 add_action('admin_menu', array('XowlClient', 'admin_menu'), 5);
 
@@ -49,10 +53,9 @@ function my_admin_head() {
 add_filter('wp_insert_post_data', 'filter_post_data', '99', 2);
 
 function filter_post_data($data, $postarr) {
-    $data['post_content'] = preg_replace('/<a class=\\\"xowl-suggestion\\\" (.*) data-entity-position=\\\"(.*)\\\" data-cke-annotation=\\\"(.*)\\\" data-cke-type=\\\"(.*)\\\" data-cke-suggestions=\\\"(.*)\\\">/iUs', '<a \1>' , $data['post_content'] );
+    $changeFrom = array('/<a class=\\\"xowl-suggestion\\\" (.*) data-(.*)>/iUs');
+    $data['post_content'] = preg_replace($changeFrom, '<a \1>', $data['post_content']);
     return $data;
 }
-
-add_filter('plugin_action_links_' . XOWL_PLUGIN_URL . '/wp-xowl-client.php' ,  array('XowlClient', 'admin_plugin_settings_link'), 10, 2);
- 
+add_filter('plugin_action_links_' . plugin_basename(__FILE__), array('XowlClient', 'admin_plugin_settings_link'), 10, 2);
 
