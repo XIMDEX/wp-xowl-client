@@ -34,7 +34,7 @@ add_action('admin_menu', array('XowlClient', 'admin_menu'), 5);
 add_filter("mce_external_plugins", array('XowlClient', "xowl_register_tinymce_plugin"));
 add_filter('mce_buttons', array('XowlClient', 'xowl_add_tinymce_button'));
 
-// Pass variables from wordpress to tinymce
+// Passing variables from wordpress to tinymce
 foreach (array('post.php', 'post-new.php') as $hook) {
     add_action("admin_head-$hook", 'my_admin_head');
 }
