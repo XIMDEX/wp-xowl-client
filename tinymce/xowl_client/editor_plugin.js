@@ -43,7 +43,7 @@
             $(this).attr('href', XowlClient.changeUrl($(this).attr('href')));
             count++;
         });
-        tinymce.activeEditor.dom.loadCSS('../wp-content/plugins/wp-xowl-client/assets/css/styles.css');
+        tinymce.activeEditor.dom.loadCSS( xowlPlugin.xowl_plugin_url + 'assets/css/styles.css');
         return $content.html();
     };
     XowlService.prototype.changeUrl = function(url) {
@@ -136,13 +136,13 @@
             // Enhance your content
             ed.addButton('xowl_button', {
                 title: 'Enhance your content',
-                image: '../wp-content/plugins/wp-xowl-client/assets/imgs/enhance.png',
+                image: xowlPlugin.xowl_plugin_url  + 'assets/imgs/enhance.png',
                 onclick: function() {
                     // add loader effect
                     $loader = $("<div/>", {
                         "class": 'loader'
                     });
-                    $("<img/>").attr('src', '../wp-content/plugins/wp-xowl-client/assets/imgs/loader.gif').appendTo($loader);
+                    $("<img/>").attr('src',xowlPlugin.xowl_plugin_url + 'assets/imgs/loader.gif').appendTo($loader);
                     $('body').css("position", "relative").append($loader);
                     // make request and replace content according with response
                     // clean content before and after response
