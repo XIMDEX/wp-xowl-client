@@ -1,38 +1,38 @@
 <link rel="stylesheet" href="<?= XOWL_PLUGIN_URL . '/assets/css/styles.css'?>"/>
+
 <form action="" method="POST">
-<div class="xowl-settings">
-    <h2>
-        <img src="<?=plugins_url('../assets/imgs/logo-xowl.png', __FILE__); ?>" alt="XOWL Service" title="XOWL Service">
-        
-                        
-        <img class="xowl-flower" src="<?=plugins_url('../assets/imgs/h2-flower.png', __FILE__) ?>">
-        <input type="submit" value="<?= _e( 'Save all the changes') ?>" class="button button-primary" style="float: right;">
+    <div class="xowl-settings">
+        <div class="xowl-header">
+            <img src="<?=plugins_url('../assets/imgs/logo-xowl.png', __FILE__); ?>" alt="XOWL Service" title="XOWL Service">
+            <img class="xowl-flower" src="<?=plugins_url('../assets/imgs/h2-flower.png', __FILE__) ?>" alt="Ximdex" title="Ximdex">
 
+            <input class="button-xowl-save-changes button button-primary" type="submit" value="<?= _e( 'Save all the changes') ?>">
+        </div>
 
-    </h2>
+        <div class="xowl-content">
+            <h3>Welcome to the Xowl client configuration page!</h3>
 
-    <div class="xowl-content">
-        <h3><?= _e( 'Welcome to the Xowl client configuration page!') ?></h3>
-        <p>An <strong>API-KEY</strong> is required to enrich your content with semantic references to the main <i>Semantic Data Stores</i> linked by this service.</p>
-    
-        <!-- get-api-key -->
-        <div class="xowl-get-api xowl-step">
-            <div class="xowl-step-row">
-                <div class="xowl-step-left">
-                    <h4>Get your own Api-Key</h4>
-                    <p>If you don't have one at this moment, you can <strong>get one for free!</strong>.
-                        <br>
-                        <small>Create your account. It only takes a few seconds.</small></p>
-                </div>
+            <p>An <strong>API-KEY</strong> is required to enrich your content with semantic references to the main <i>Semantic Data Stores</i> linked by this service.</p>
 
-                <div class="xowl-step-right text-right">
-                    <a class="button button-primary" target="_blank" href="<?=get_option('xowl_register') ?>">get an api-key</a>
+            <!-- get-api-key -->
+            <div class="xowl-get-api xowl-step">
+                <div class="xowl-step-row">
+                    <div class="xowl-step-left">
+                        <h4>Get your own Api-Key</h4>
+                        <p>
+                            If you don't have one at this moment, you can <strong>get one for free!</strong>.
+                            <br>
+                            <small>Create your account. It only takes a few seconds.</small>
+                        </p>
+                    </div>
+
+                    <div class="xowl-step-right text-right">
+                        <a class="button button-primary" target="_blank" href="<?=get_option('xowl_register') ?>">get an api-key</a>
+                    </div>
                 </div>
             </div>
-        </div>
-        <!-- end get-api-key -->
+            <!-- end get-api-key -->
 
-        <!-- form -->
             <!-- enter set endpoint -->
             <div class="xowl-endpoint xowl-step">
                 <div class="xowl-step-row">
@@ -41,11 +41,14 @@
                         <p>Type below the given <strong>API-KEY</strong> on your Ximdex account in order to validate it.</p>
                     </div>
 
-                    <div class="xowl-step-left">
+                    <div class="xowl-check-step xowl-step-left">
                         <label for="active-api-token">API-KEY:</label>
                         <input id="active-api-token" type="text" name="xowl_apikey" value="<?=get_option('xowl_apikey') ?>"/>
+
                         <button id="xowl-check-token" type="button" class="button button-primary">Check token</button>
-                        <span id="is-valid-token" class=""></span>
+
+                        <img id="xowl-check-icon-1" class="xowl-check-icon" src="<?=plugins_url('../assets/imgs/check-icon-1.png', __FILE__); ?>">
+                        <img id="xowl-check-icon-2" class="xowl-check-icon" src="<?=plugins_url('../assets/imgs/check-icon-2.png', __FILE__); ?>">
                     </div>
                 </div>
             </div>
@@ -68,16 +71,17 @@
                 </div>
             </div>
             <!-- end set api key -->
-        <!-- end form -->
 
-        <!-- XOWL -->
-        <div class="xowl-demo">
-            <h3>Do you want to know more about Xowl Service?</h3>
-            <p>Visit our <a href="http://demo.ximdex.com/xowl/" target="_blank">Demo Page</a> or the <a href="https://github.com/XIMDEX/wp-xowl-client" target="_blank">Github's plugin page</a>.</p>
+            <!-- XOWL -->
+            <div class="xowl-demo">
+                <h3>Do you want to know more about Xowl Service?</h3>
+                <p>
+                    Visit our <a href="http://demo.ximdex.com/xowl/" target="_blank">Demo Page</a> or the <a href="https://github.com/XIMDEX/wp-xowl-client" target="_blank">Github's plugin page</a>.
+                </p>
+            </div>
+            <!-- end XOWL -->
         </div>
-        <!-- end XOWL -->
     </div>
-</div>
-        </form>
+</form>
 
- <script src="<?=plugins_url('../assets/js/config-form.js', __FILE__); ?>"></script>
+<script src="<?=plugins_url('../assets/js/config-form.js', __FILE__); ?>"></script>
