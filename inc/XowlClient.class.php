@@ -25,13 +25,9 @@
 class XowlClient {
     
     private static $initiated = false;
-    private $service;
-    
+     
     public static function init() {
-        if (!self::$initiated) {
-            $service = new XowlService(get_option('xowl_endpoint'));
-            self::load_xowl_styles();
-        }
+     
     }
     
     /**
@@ -43,11 +39,7 @@ class XowlClient {
         echo $service->suggest($content);
     }
     
-    private static function load_xowl_styles() {
-        wp_register_style('XowlClient', XOWL_PLUGIN_URL . '/assets/css/styles.css', array() , false);
-        wp_enqueue_style('XowlClient');
-    }
-    
+ 
     private static function init_hooks() {
     }
     
