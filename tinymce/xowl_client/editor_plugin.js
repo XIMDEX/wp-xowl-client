@@ -44,6 +44,10 @@
             $(this).attr('data-entity-position', count);
             $(this).attr('target', '_blank');
             $(this).attr('href', XowlClient.changeUrl($(this).attr('href')));
+            
+            if($(this).attr("data-cke-suggestions") == 1) {
+                $(this).removeAttr("data-cke-suggestions");
+            }
             count++;
         });
         tinymce.activeEditor.dom.loadCSS(xowlPlugin.xowl_plugin_url + 'assets/css/styles.css');
