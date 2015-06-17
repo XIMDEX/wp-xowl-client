@@ -1,4 +1,5 @@
-        <form action="" method="POST">
+<link rel="stylesheet" href="<?= XOWL_PLUGIN_URL . '/assets/css/styles.css'?>"/>
+<form action="" method="POST">
 <div class="xowl-settings">
     <h2>
         <img src="<?=plugins_url('../assets/imgs/logo-xowl.png', __FILE__); ?>" alt="XOWL Service" title="XOWL Service">
