@@ -77,7 +77,6 @@
             self.firstLoad = true;
             // listen click inside textarea
             ed.on('click', function(ev) {
-                console.log(ev);
                 var entityPosition = ev.target.getAttribute('data-entity-position');
                 if (entityPosition > "" && ev.target.className === "xowl-suggestion" && typeof XowlClient.semantic[entityPosition] === 'object') {
                     var bodyValues = [];
@@ -93,7 +92,6 @@
                             text: label + ' (' + XowlClient.changeUrl(e.uri) + ')',
                             value: XowlClient.changeUrl(e.uri)
                         });
-                        console.log(e);
                     });
                     var listBox = new tinymce.ui.ListBox({
                         name: 'selectedEntity',
@@ -105,7 +103,6 @@
                         }
                     });
                     listBox.value(currentUrl);
-                    // var currentValue = console.log(e ) ;
                     tinymce.activeEditor.windowManager.open({
                         elem: this,
                         title: 'Select Entity Dialog',
@@ -130,7 +127,6 @@
                         }],
                         // rebuild content inside textarea
                         onsubmit: function(ev) {
-                            console.log(ev);
                         }
                     });
                 }
