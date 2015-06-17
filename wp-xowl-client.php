@@ -1,12 +1,13 @@
 <?php
 
 /**
- * Plugin Name: Xowl client
+ * Plugin Name: Xowl Service
  * Plugin URI: http://demo.ximdex.com/xowl
  * Description: An editor plugin for detect semantic entities on your content.
- * Version: 1.0
+ * Version: 0.1
  * Author: OXE development team
  * Author URI: http://www.ximdex.com/
+ * Text Domain: xowl-client
  *
  */
 

@@ -5,13 +5,13 @@
         
                         
         <img class="xowl-flower" src="<?=plugins_url('../assets/imgs/h2-flower.png', __FILE__) ?>">
-        <input type="submit" value="Save all the changes" class="button button-primary" style="float: right;">
+        <input type="submit" value="<?= _e( 'Save all the changes') ?>" class="button button-primary" style="float: right;">
 
 
     </h2>
 
     <div class="xowl-content">
-        <h3>Welcome to the Xowl client configuration page!</h3>
+        <h3><?= _e( 'Welcome to the Xowl client configuration page!') ?></h3>
         <p>An <strong>API-KEY</strong> is required to enrich your content with semantic references to the main <i>Semantic Data Stores</i> linked by this service.</p>
     
         <!-- get-api-key -->
