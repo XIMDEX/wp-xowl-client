@@ -3,11 +3,15 @@
         var checkTokenButton = $("#xowl-check-token");
 
         function setSpanText(error) {
-            if (error) {
-                $('#is-valid-token').html(' Invalid token').removeClass('token-valid').addClass('token-invalid');
-            } else {
-                $('#is-valid-token').html(' Valid token!').removeClass('token-invalid').addClass('token-valid');
-            }
+
+            var check1   = $('#xowl-check-icon-1');
+            var check2   = $('#xowl-check-icon-2');
+
+            check1.hide ();
+            check2.hide ();
+
+            if (error)  check1.show ();
+            else        check2.show ();
         }
 
         checkTokenButton.click(function () {
@@ -33,4 +37,3 @@
         });
     });
 })(jQuery);
-    

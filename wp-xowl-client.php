@@ -19,8 +19,7 @@ define('XOWL_MINIMUM_WP_VERSION', '4.2');
 define('XOWL_PLUGIN_URL', plugin_dir_url(__FILE__));
 define('XOWL_PLUGIN_DIR', plugin_dir_path(__FILE__));
 
-require_once (XOWL_PLUGIN_DIR . '/inc/XowlService.class.php');
-require_once (XOWL_PLUGIN_DIR . '/inc/XowlClient.class.php');
+require_once (XOWL_PLUGIN_DIR . '/inc/XowlClient.php');
 
 register_activation_hook(__FILE__, array('XowlClient', 'plugin_activation'));
 register_deactivation_hook(__FILE__, array('XowlClient', 'plugin_deactivation'));

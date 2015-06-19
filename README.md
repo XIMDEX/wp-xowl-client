@@ -5,7 +5,7 @@ This WordPress plugin adds to your default editor (TinyMCE) the ability to detec
 ## Installing instructions
 This plugin works with the latest version of Wordpress (v4.2.2)
 
-You can directly download the ZIP file and install it as any WordPress plugin, that is, unzip it on the _wp-content/plugins_ folder and WordPress itself should recognize it as plugin from its user interface.
+You can directly download the source code on its first release [here](https://github.com/XIMDEX/wp-xowl-client/releases/tag/0.1). Install it as any WordPress plugin, that is, unzip it on the _wp-content/plugins_ folder and WordPress itself should recognize it as plugin from its user interface.
 
 You will have to request us an API-Key in our registration page in order to use it. The URL of this register page is provided by the module itself. Once the token has been validated, we can enrich our posts with references to a several semantic entities. 
 

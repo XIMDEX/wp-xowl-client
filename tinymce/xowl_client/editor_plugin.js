@@ -3,7 +3,6 @@
  */
 (function ($) {
     var SELECTED_ENTITY_CLASS = 'data-xowl-selected';
-    
     // clean contents before send to Xowl Service 
     var XowlService = function () {
         this.semantic = [];
@@ -11,17 +10,13 @@
     XowlService.prototype.preClean = function () {
         var self = this;
         var $content = $('<div></div>').append($.parseHTML(this.getContent()));
-        $('a', $content).each(function () {
-            if (typeof $(this).attr("data-cke-suggestions") == 'string') {
-                $(this).removeAttr(SELECTED_ENTITY_CLASS);
-                $(this).removeAttr("data-cke-suggestions");
-                $(this).removeAttr("data-entity-position");
-                $(this).removeAttr("data-cke-annotation");
-                $(this).removeAttr("data-cke-type");
-                $(this).removeClass("xowl-suggestion");
-            } else {
-                return;
-            }
+        $('a.xowl-suggestion', $content).each(function () {
+            $(this).removeAttr(SELECTED_ENTITY_CLASS);
+            $(this).removeAttr("data-cke-suggestions");
+            $(this).removeAttr("data-entity-position");
+            $(this).removeAttr("data-cke-annotation");
+            $(this).removeAttr("data-cke-type");
+            $(this).removeClass("xowl-suggestion");
         });
         return $content.html();
     };
@@ -44,8 +39,7 @@
             $(this).attr('data-entity-position', count);
             $(this).attr('target', '_blank');
             $(this).attr('href', XowlClient.changeUrl($(this).attr('href')));
-            
-            if($(this).attr("data-cke-suggestions") == 1) {
+            if ($(this).attr("data-cke-suggestions") == 1) {
                 $(this).removeAttr("data-cke-suggestions");
             }
             count++;
@@ -83,7 +77,6 @@
         element.attr(SELECTED_ENTITY_CLASS, '1');
         self.setContent(content.html());
     };
-
     var XowlClient = new XowlService();
     // Register the buttons
     tinymce.create('tinymce.plugins.xowl_plugin', {

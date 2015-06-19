@@ -20,6 +20,13 @@ This WordPress plugin adds to your default editor (TinyMCE) the ability to detec
 1. Activate the plugin through the 'Plugins' menu in WordPress.
 1. Edit and enhance your posts' content by clicking on the new button on the TinyMCE's toolbar.
 
+== Screenshots ==
+
+1. This screenshot description corresponds to enhancement01.png (taken from the /assets/imgs/screenshots directory) and shows the post enhancement with external referencies to entities recognized, visually distinct by type (Person, Places, Organizations, etc..).
+2. This second screenshot description corresponds to enhancement02.png (taken from the /assets/imgs/screenshots directory) and shows the disambiguation dialog that appears when an entity has more than one related meanings.
+3. This third screenshot description corresponds to enhancement03.png (taken from the /assets/imgs/screenshots directory) and shows a published post with all the references to the official wikipedia pages of each entity.
+4. The last screenshot description corresponds to tag_icon.png (taken from the /assets/imgs/screenshots directory) and shows up the enhance post button on the TinyMCE's toolbar.
+
 == Frequently Asked Questions ==
 
 Waiting for any question to answer...
@@ -36,3 +43,7 @@ Waiting for any question to answer...
 
 * First beta pre-release.
 
+== Upgrade Notice ==
+
+= 0.1 =
+No related notes found yet.
