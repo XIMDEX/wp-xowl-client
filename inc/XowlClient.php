@@ -44,9 +44,9 @@ class XowlClient {
     }
     
     public static function plugin_activation() {
-        add_option('xowl_endpoint', 'http://x8.ximdex.net/api/v1/enhance' , true );
+        add_option('xowl_endpoint', 'http://xowl.ximdex.net/api/v1/enhance' , true );
         add_option('xowl_apikey', '', true);
-        add_option('xowl_register', 'http://x8.ximdex.net/register/signup', '', true);
+        add_option('xowl_register', 'http://xowl.ximdex.net/register/signup', '', true);
       } 
     
     public static function plugin_deactivation() {
