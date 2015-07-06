@@ -1,12 +1,12 @@
-<link rel="stylesheet" href="<?= XOWL_PLUGIN_URL . '/assets/css/styles.css'?>"/>
+<link rel="stylesheet" href="<?php echo XOWL_PLUGIN_URL . '/assets/css/styles.css'?>"/>
 
 <form action="" method="POST">
     <div class="xowl-settings">
         <div class="xowl-header">
-            <img src="<?=plugins_url('../assets/imgs/logo-xowl.png', __FILE__); ?>" alt="XOWL Service" title="XOWL Service">
-            <img class="xowl-flower" src="<?=plugins_url('../assets/imgs/h2-flower.png', __FILE__) ?>" alt="Ximdex" title="Ximdex">
+            <img src="<?php echo plugins_url('../assets/imgs/logo-xowl.png', __FILE__); ?>" alt="XOWL Service" title="XOWL Service">
+            <img class="xowl-flower" src="<?php echo plugins_url('../assets/imgs/h2-flower.png', __FILE__) ?>" alt="Ximdex" title="Ximdex">
 
-            <input class="button-xowl-save-changes button button-primary" type="submit" value="<?= _e( 'Save all the changes') ?>">
+            <input class="button-xowl-save-changes button button-primary" type="submit" value="<?php echo _e( 'Save all the changes') ?>">
         </div>
 
         <div class="xowl-content">
@@ -27,7 +27,7 @@
                     </div>
 
                     <div class="xowl-step-right text-right">
-                        <a class="button button-primary" target="_blank" href="<?=get_option('xowl_register') ?>">get an api-key</a>
+                        <a class="button button-primary" target="_blank" href="<?php echo get_option('xowl_register') ?>">get an api-key</a>
                     </div>
                 </div>
             </div>
@@ -43,12 +43,12 @@
 
                     <div class="xowl-check-step xowl-step-left">
                         <label for="active-api-token">API-KEY:</label>
-                        <input id="active-api-token" type="text" name="xowl_apikey" value="<?=get_option('xowl_apikey') ?>"/>
+                        <input id="active-api-token" type="text" name="xowl_apikey" value="<?php echo get_option('xowl_apikey') ?>"/>
 
                         <button id="xowl-check-token" type="button" class="button button-primary">Check token</button>
 
-                        <img id="xowl-check-icon-1" class="xowl-check-icon" src="<?=plugins_url('../assets/imgs/check-icon-1.png', __FILE__); ?>">
-                        <img id="xowl-check-icon-2" class="xowl-check-icon" src="<?=plugins_url('../assets/imgs/check-icon-2.png', __FILE__); ?>">
+                        <img id="xowl-check-icon-1" class="xowl-check-icon" src="<?php echo plugins_url('../assets/imgs/check-icon-1.png', __FILE__); ?>">
+                        <img id="xowl-check-icon-2" class="xowl-check-icon" src="<?php echo plugins_url('../assets/imgs/check-icon-2.png', __FILE__); ?>">
                     </div>
                 </div>
             </div>
@@ -64,7 +64,7 @@
 
                     <div class="xowl-step-left">
                         <label for="active-api-endpoint">ENDPOINT URL:</label>
-                        <input id="active-api-endpoint" type="text" name="xowl_endpoint" value="<?=get_option('xowl_endpoint') ?>" size="60"/>
+                        <input id="active-api-endpoint" type="text" name="xowl_endpoint" value="<?php echo get_option('xowl_endpoint') ?>" size="60"/>
                         <br/>
                         <!--<button type="submit" class="button button-primary">submit</button>-->
                     </div>
@@ -84,4 +84,4 @@
     </div>
 </form>
 
-<script src="<?=plugins_url('../assets/js/config-form.js', __FILE__); ?>"></script>
+<script src="<?php echo plugins_url('../assets/js/config-form.js', __FILE__); ?>"></script>
