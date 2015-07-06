@@ -1,7 +1,7 @@
 /**
  * plugin for tinymce and wordpress accessing xowl service
  */
-(function ($) {
+ (function ($) {
     var SELECTED_ENTITY_CLASS = 'data-xowl-selected';
     // clean contents before send to Xowl Service 
     var XowlService = function () {
@@ -116,33 +116,34 @@
                         title: 'Select Entity Dialog',
                         body: [listBox],
                         buttons: [{
-                                text: 'Aceptar',
-                                onclick: function () {
-                                    XowlClient.changeUri(entityPosition, currentUrl);
-                                    this.parent().fire('submit');
-                                }
-                            }, {
-                                text: 'Cancelar',
-                                onclick: function () {
-                                    this.parent().fire('cancel');
-                                }
-                            }, {
-                                text: 'Remove',
-                                onclick: function () {
-                                    XowlClient.removeEntity(entityPosition);
-                                    this.parent().fire('cancel');
-                                }
-                            }],
+                            text: 'Aceptar',
+                            onclick: function () {
+                                XowlClient.changeUri(entityPosition, currentUrl);
+                                this.parent().fire('submit');
+                            }
+                        }, {
+                            text: 'Cancelar',
+                            onclick: function () {
+                                this.parent().fire('cancel');
+                            }
+                        }, {
+                            text: 'Remove',
+                            onclick: function () {
+                                XowlClient.removeEntity(entityPosition);
+                                this.parent().fire('cancel');
+                            }
+                        }],
                         // rebuild content inside textarea
                         onsubmit: function () {
                             XowlClient.setSelected(entityPosition);
                         }
                     });
-                }
-            });
+}
+});
             // init xsa object
             ed.on('LoadContent', function () {
             });
+
             // Enhance your content
             ed.addButton('xowl_button', {
                 title: 'Enhance your content',
@@ -152,7 +153,25 @@
                     $loader = $("<div/>", {
                         "class": 'loader'
                     });
-                    $("<img/>").attr('src', xowlPlugin.xowl_plugin_url + 'assets/imgs/loader.gif').appendTo($loader);
+                    $loader.css({
+                        position: "fixed",
+                        top: 0,
+                        left: 0,
+                        width: "100%",
+                        height: "100%",
+                        "background-color": "black",
+                        opacity: 0.5,
+                        "z-index": 1000
+                    });
+                    $("<img/>").attr('src', xowlPlugin.xowl_plugin_url + 'assets/imgs/loader.gif').css(
+                    {
+                        position: "fixed",
+                        left: "50%",
+                        top: "50%",
+                        width: "100px",
+                        "margin-top":"-50px",
+                        "margin-left":"-50px"
+                    }).appendTo($loader);
                     $('body').css("position", "relative").append($loader);
                     // make request and replace content according with response
                     // clean content before and after response
@@ -169,10 +188,10 @@
                     });
                 }
             });
-        }
-    });
-    /* Start the buttons */
-    tinymce.PluginManager.add('xowl_button', tinymce.plugins.xowl_plugin);
+}
+});
+/* Start the buttons */
+tinymce.PluginManager.add('xowl_button', tinymce.plugins.xowl_plugin);
     // ----------------------------------------------------------------------------
     // return html with restricted attributes
 })(jQuery);
