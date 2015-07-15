@@ -1,10 +1,9 @@
-<link rel="stylesheet" href="<?php echo XOWL_PLUGIN_URL . '/assets/css/styles.css'?>"/>
 
 <form action="" method="POST">
     <div class="xowl-settings">
         <div class="xowl-header">
-            <img src="<?php echo plugins_url('../assets/imgs/logo-xowl.png', __FILE__); ?>" alt="XOWL Service" title="XOWL Service">
-            <img class="xowl-flower" src="<?php echo plugins_url('../assets/imgs/h2-flower.png', __FILE__) ?>" alt="Ximdex" title="Ximdex">
+            <img src="<?php echo XowlClient::urlTo(  'assets/imgs/logo-xowl.png' ) ;  ?>" alt="XOWL Service" title="XOWL Service">
+            <img class="xowl-flower" src="<?php  echo XowlClient::urlTo(  'assets/imgs/h2-flower.png' ) ; ?>" alt="Ximdex" title="Ximdex">
 
             <input class="button-xowl-save-changes button button-primary" type="submit" value="<?php echo _e( 'Save all the changes') ?>">
         </div>
@@ -47,8 +46,8 @@
 
                         <button id="xowl-check-token" type="button" class="button button-primary">Check token</button>
 
-                        <img id="xowl-check-icon-1" class="xowl-check-icon" src="<?php echo plugins_url('../assets/imgs/check-icon-1.png', __FILE__); ?>">
-                        <img id="xowl-check-icon-2" class="xowl-check-icon" src="<?php echo plugins_url('../assets/imgs/check-icon-2.png', __FILE__); ?>">
+                        <img id="xowl-check-icon-1" class="xowl-check-icon" src="<?php echo  XowlClient::urlTo( 'assets/imgs/check-icon-1.png' ); ?>">
+                        <img id="xowl-check-icon-2" class="xowl-check-icon" src="<?php echo  XowlClient::urlTo( 'assets/imgs/check-icon-2.png' ); ?>">
                     </div>
                 </div>
             </div>
@@ -84,4 +83,3 @@
     </div>
 </form>
 
-<script src="<?php echo plugins_url('../assets/js/config-form.js', __FILE__); ?>"></script>
